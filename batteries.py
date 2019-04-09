@@ -1,4 +1,4 @@
-class Batteries(object):
+class Battery(object):
     def __init__(self, id, x, y, in_put):
         self.id = id
         self.x_bat = int(x)
