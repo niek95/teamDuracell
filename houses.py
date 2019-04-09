@@ -5,7 +5,7 @@ class House(object):
         self.y_house = y
         self.output = output
         self.routes = []
-    
+
     def add_route(self, x, y):
         x_length = self.x_house - x
         if x_length < 0:
