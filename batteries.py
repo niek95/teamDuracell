@@ -15,3 +15,9 @@ class Battery(object):
             y_distance *= -1
         total_distance = x_distance + y_distance
         self.routes.append(total_distance)
+
+    def get_x(self):
+        return self.x_bat
+
+    def get_y(self):
+        return self.y_bat

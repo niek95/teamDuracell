@@ -15,3 +15,9 @@ class House(object):
             y_length *= -1
         total_length = x_length + y_length
         self.routes.append(total_length)
+
+    def get_x(self):
+        return self.x_house
+
+    def get_y(self):
+        return self.y_house
