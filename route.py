@@ -3,17 +3,17 @@ class Route(object):
         self._house = house
         self._battery = battery
         self._coordinates = self.calculate_route()
-        self._length = len(self.coordinates)
+        self._length = len(self._coordinates)
 
     def calculate_route(self):
         route = []
-        start_x = min(self.house.get_x, self.battery.get_x)
-        start_y = min(self.house.get_y, self.battery.get_y)
-        end_x = max(self.house.get_x, self.battery.get_x)
-        end_y = max(self.house.get_y, self.battery.get_y)
+        start_x = min(self._house.get_x(), self._battery.get_x())
+        start_y = min(self._house.get_y(), self._battery.get_y())
+        end_x = max(self._house.get_x(), self._battery.get_x())
+        end_y = max(self._house.get_y(), self._battery.get_y())
         x = start_x
         y = start_y
-        length = sum(end_x - start_x, end_y - start_y)
+        length = sum((end_x - start_x, end_y - start_y))
         route.append((x, y))
         for curr_length in range(0, length):
             if x != end_x:
