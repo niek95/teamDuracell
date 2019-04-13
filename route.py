@@ -6,6 +6,10 @@ class Route(object):
         self._length = len(self._coordinates)
 
     def calculate_route(self):
+        """
+        calculates the most basic route between battery and house, going
+        horizontally first, then vertically, adding coordinates to the list
+        """
         route = []
         start_x = min(self._house.get_x(), self._battery.get_x())
         start_y = min(self._house.get_y(), self._battery.get_y())

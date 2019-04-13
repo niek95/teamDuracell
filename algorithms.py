@@ -1,4 +1,7 @@
 def connect_basic(batteries, houses):
+    """
+    Goes through each battery, adding houses if possible
+    """
     houses = houses
     batteries = batteries
     connected_houses = []

@@ -9,6 +9,7 @@ ROUTE_COST = 9
 def main():
     batteries = import_batteries(sys.argv[1])
     houses = import_houses(sys.argv[2])
+    # run algorithm of choice
     if sys.argv[3] == 1:
         connected = algorithms.connect_basic(batteries, houses)
     elif sys.argv[3] == 2:
@@ -18,6 +19,7 @@ def main():
     else:
         print("we haven't implemented that yet")
         sys.exit(1)
+    # print true if all houses connected, and total price
     print(connected)
     print(calculate_costs(batteries))
 
