@@ -26,3 +26,11 @@ def connect_greedy(batteries, houses):
 
 def connect_greedy_hillclimb(batteries, houses):
     "TODO"
+
+
+def constraint_relaxation():
+    "TODO"
+
+
+def new_algorithm():
+    "TODO"
