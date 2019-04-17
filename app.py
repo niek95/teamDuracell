@@ -2,6 +2,7 @@ import sys
 import algorithms
 from battery import Battery
 from house import House
+import matplotlib.pyplot as plt
 
 ROUTE_COST = 9
 
@@ -10,11 +11,11 @@ def main():
     batteries = import_batteries(sys.argv[1])
     houses = import_houses(sys.argv[2])
     # run algorithm of choice
-    if sys.argv[3] == 1:
+    if sys.argv[3] == "1":
         connected = algorithms.connect_basic(batteries, houses)
-    elif sys.argv[3] == 2:
+    elif sys.argv[3] == "2":
         connected = algorithms.connect_greedy(batteries, houses)
-    elif sys.argv[3] == 3:
+    elif sys.argv[3] == "3":
         connected = algorithms.connect_greedy_hillclimb(batteries, houses)
     else:
         print("we haven't implemented that yet")
@@ -69,6 +70,10 @@ def calculate_costs(batteries):
     for battery in batteries:
         for route in battery.routes:
             cost += route.get_length()*ROUTE_COST
+            for i in route.get_coordinates():   
+                #print(i[0], i[1])      
+                plt.plot(i[1] ,i[0] , 'ro--')
+    plt.show()
     return cost
 
 
