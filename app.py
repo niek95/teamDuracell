@@ -17,6 +17,8 @@ def main():
         connected = algorithms.connect_greedy(batteries, houses)
     elif sys.argv[3] == "3":
         connected = algorithms.connect_greedy_hillclimb(batteries, houses)
+    elif sys.argv[3] == "4":
+        connected = algorithms.constraint_relaxation(batteries, houses)
     else:
         print("we haven't implemented that yet")
         sys.exit(1)
@@ -70,8 +72,8 @@ def calculate_costs(batteries):
     for battery in batteries:
         for route in battery.routes:
             cost += route.get_length()*ROUTE_COST
-            for i in route.get_coordinates():   
-                #print(i[0], i[1])      
+            for i in route.get_coordinates():
+                #print(i[0], i[1])
                 plt.plot(i[1] ,i[0] , 'ro--')
     plt.show()
     return cost

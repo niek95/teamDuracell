@@ -1,6 +1,7 @@
 from helpers import countSort1
 from route import Route
 
+
 def connect_basic(batteries, houses):
     """
     Goes through each battery, adding houses if possible
@@ -30,7 +31,7 @@ def connect_greedy(batteries, houses):
         sorted_houses = []
         for house in houses:
             route = Route(house, battery)
-            sorted_houses.append((route.get_length(), house ))
+            sorted_houses.append((route.get_length(), house))
         sorted_houses = countSort1(sorted_houses)
 
         for i in sorted_houses:
@@ -53,15 +54,25 @@ def constraint_relaxation(batteries, houses):
     """
     houses = houses
     batteries = batteries
-    connected_houses = []
-    for i in range(0, len(batteries)):
-        battery = batteries[i]
-        for house in houses:
-            "Do stuff"
+    distances = []
     for battery in batteries:
-        while battery.get_used_cap > battery.get_capacity:
-
-    return True
+        sorted_houses = []
+        for house in houses:
+            route = Route(house, battery)
+            sorted_houses.append((route.get_length(), house))
+        sorted_houses = countSort1(sorted_houses)
+        distances.append(sorted_houses)
+    while len(houses) >= 0:
+        i = 0
+        for battery in batteries:
+            closest_house = distances[i][0][1]
+            print(distances)
+            battery.connect_house(closest_house)
+            houses.remove(closest_house)
+            for d in distances:
+                d.remove(closest_house)
+            i += 1
+    return len(houses) == 0
 
 
 def new_algorithm():
