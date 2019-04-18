@@ -64,12 +64,16 @@ def constraint_relaxation(batteries, houses):
         distances.append(sorted_houses)
 
     while len(houses) > 0:
-        for i in range(len(batteries)):
+        for i in range(len(distances)):
             closest_house = distances[i][0]
+            print(closest_house)
+            print(closest_house in distances[1])
             batteries[i].connect_house(closest_house[1])
             houses.remove(closest_house[1])
             for d in distances:
-                d.remove(closest_house)
+                for house in d:
+                    if house[1] == closest_house[1]:
+                        d.remove(house)
             i += 1
     return len(houses) == 0
 

@@ -8,16 +8,21 @@ ROUTE_COST = 9
 
 
 def main():
-    batteries = import_batteries(sys.argv[1])
-    houses = import_houses(sys.argv[2])
+    switcher = {
+        "1": ("Data/wijk1_batterijen.txt", "Data/wijk1_huizen.txt"),
+        "2": ("Data/wijk2_batterijen.txt", "Data/wijk2_huizen.txt"),
+        "3": ("Data/wijk3_batterijen.txt", "Data/wijk3_huizen.txt")
+    }
+    batteries = import_batteries(switcher[sys.argv[1]][0])
+    houses = import_houses(switcher[sys.argv[1]][1])
     # run algorithm of choice
-    if sys.argv[3] == "1":
+    if sys.argv[2] == "1":
         connected = algorithms.connect_basic(batteries, houses)
-    elif sys.argv[3] == "2":
+    elif sys.argv[2] == "2":
         connected = algorithms.connect_greedy(batteries, houses)
-    elif sys.argv[3] == "3":
+    elif sys.argv[2] == "3":
         connected = algorithms.connect_greedy_hillclimb(batteries, houses)
-    elif sys.argv[3] == "4":
+    elif sys.argv[2] == "4":
         connected = algorithms.turn_by_turn(batteries, houses)
     else:
         print("we haven't implemented that yet")
@@ -82,7 +87,7 @@ def calculate_costs(batteries):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print("Usage: app.py battery_file house_file algorithm_no")
+    if len(sys.argv) != 3:
+        print("Usage: app.py neighbourhood_no algorithm_no")
         sys.exit(1)
     main()
