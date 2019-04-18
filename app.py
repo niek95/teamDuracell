@@ -24,6 +24,8 @@ def main():
         connected = algorithms.connect_greedy_hillclimb(batteries, houses)
     elif sys.argv[2] == "4":
         connected = algorithms.turn_by_turn(batteries, houses)
+    elif sys.argv[2] == "5":
+        connected = algorithms.constraint_relaxation(batteries, houses)
     else:
         print("we haven't implemented that yet")
         sys.exit(1)

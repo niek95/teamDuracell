@@ -49,8 +49,8 @@ def connect_greedy_hillclimb(batteries, houses):
 
 def constraint_relaxation(batteries, houses):
     """
-    Connects all houses greedily, then switches everything until constraints
-    are satisfied
+    Keeps connecting the closest house and battery, then switches routes until
+    constraints are satisfied
     """
     houses = houses
     batteries = batteries
@@ -64,17 +64,18 @@ def constraint_relaxation(batteries, houses):
         distances.append(sorted_houses)
 
     while len(houses) > 0:
+        closest = distances[0][0]
+        id = 0
         for i in range(len(distances)):
-            closest_house = distances[i][0]
-            print(closest_house)
-            print(closest_house in distances[1])
-            batteries[i].connect_house(closest_house[1])
-            houses.remove(closest_house[1])
-            for d in distances:
-                for house in d:
-                    if house[1] == closest_house[1]:
-                        d.remove(house)
-            i += 1
+            if distances[i][0][0] < closest[0]:
+                closest = distances[i][0]
+                id = i
+        batteries[id].connect_house(closest[1])
+        houses.remove(closest[1])
+        for d in distances:
+            for tuple in d:
+                if tuple[1] == closest[1]:
+                    d.remove(tuple)
     return len(houses) == 0
 
 
@@ -98,8 +99,6 @@ def turn_by_turn(batteries, houses):
     while len(houses) > 0:
         for i in range(len(distances)):
             closest_house = distances[i][0]
-            print(closest_house)
-            print(closest_house in distances[1])
             batteries[i].connect_house(closest_house[1])
             houses.remove(closest_house[1])
             for d in distances:
