@@ -18,12 +18,14 @@ def main():
     elif sys.argv[3] == "3":
         connected = algorithms.connect_greedy_hillclimb(batteries, houses)
     elif sys.argv[3] == "4":
-        connected = algorithms.constraint_relaxation(batteries, houses)
+        connected = algorithms.turn_by_turn(batteries, houses)
     else:
         print("we haven't implemented that yet")
         sys.exit(1)
     # print true if all houses connected, and total price
     print(connected)
+    for battery in batteries:
+        print(battery.get_used_cap())
     print(calculate_costs(batteries))
 
 

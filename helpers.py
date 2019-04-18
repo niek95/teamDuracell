@@ -1,3 +1,6 @@
+MAX_DISTANCE = 100
+
+
 # alphabetical order
 def countSort(arr):
 
@@ -33,24 +36,26 @@ def countSort(arr):
     return ans
 
 
-def countSort1(array):
-    row = []
+def countSort2(houses):
+    """
+    Takes a list containing tuples containing the length to a battery and
+    the corresponding house. Returns the same list ordered by length
+    """
+    count = []
+    for i in range(0, MAX_DISTANCE):
+        count.append([0, []])
 
-    for i in range(100):
-        row.append([0, []])
+    for tuple in houses:
+        length = tuple[0]
+        count[length-1][0] += 1
+        count[length-1][1].append(tuple)
+    for i in range(1, len(count)):
+        count[i][0] += count[i - 1][0]
 
-    for i in array:
-        length = int(i[0])
-        row[length][0] += 1
-        row[length][1].append(i[1])
+    sorted = []
 
-    for i in range(len(row)):
-        row[i] += row[i - 1]
-
-    array = []
-
-    for i in range(len(row)):
-        if row[i] != row[i-1]:
-            array.append((row[i][0], row[i][1]))
-
-    return array
+    for i in range(1, len(count)):
+        if count[i][0] != count[i-1][0]:
+            for house in count[i][1]:
+                sorted.append(house)
+    return sorted
