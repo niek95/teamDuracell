@@ -83,7 +83,7 @@ def calculate_costs(batteries):
             cost += route.get_length()*ROUTE_COST
             for i in route.get_coordinates():
                 #print(i[0], i[1])
-                plt.plot(i[1] ,i[0] , 'ro--')
+                plt.plot(i[0] ,i[1] , 'ro--')
     plt.show()
     return cost
 

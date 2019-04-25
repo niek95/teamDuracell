@@ -24,23 +24,27 @@ def connect_basic(batteries, houses):
 
 
 def connect_greedy(batteries, houses):
+    """
+    Goes through each battery, adding the most nearby houses if possible
+    """
     houses = houses
-
-    for battery in batteries:
-        connected_houses = []
-        sorted_houses = []
-        for house in houses:
+    batteries = batteries
+    counter = 0
+    for house in houses:
+        sorted_batteries = []
+        for battery in batteries:
             route = Route(house, battery)
-            sorted_houses.append((route.get_length(), house))
-        sorted_houses = countSort2(sorted_houses)
+            cap_left = battery.get_capacity() - battery.get_used_cap()
+            if house.get_output() < cap_left:
+                sorted_batteries.append((route.get_length(), battery))
 
-        for i in sorted_houses:
-            houses = i[1]
-            for house in houses:
-                battery.connect_house(house)
-                connected_houses.append(house)
-                houses.remove(house)
-    return len(houses) == 0
+        sorted_batteries = countSort2(sorted_batteries)        
+        sorted_batteries[0][1].connect_house(house)
+        print(sorted_batteries[0])
+        counter += 1
+        print(counter)
+        
+    return len(houses) == 150
 
 
 def connect_greedy_hillclimb(batteries, houses):
