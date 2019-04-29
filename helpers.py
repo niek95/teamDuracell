@@ -49,6 +49,7 @@ def countSort2(houses):
         length = tuple[0]
         count[length-1][0] += 1
         count[length-1][1].append(tuple)
+        
     for i in range(1, len(count)):
         count[i][0] += count[i - 1][0]
 

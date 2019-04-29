@@ -44,6 +44,20 @@ def connect_greedy(batteries, houses):
 
 
 def connect_greedy_hillclimb(batteries, houses):
+    # List of all the connected houses
+    connected_houses = []
+    # List of sorted houses
+    sorted_houses = []
+
+    # Iterate over the batteries and houses
+    for battery in batteries:
+        for house in houses:
+            route = Route(house, battery)
+            sorted_houses.append((route.get_length(), house))
+        sorted_houses = countSort2(sorted_houses)
+
+        # Connect huizen random en kijk of afstand van huis naar batterij de kortste is dmv sorted2, zo ja: append aan connected_houses, anders connect nieuw huis
+
     return "TODO"
 
 
