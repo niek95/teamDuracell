@@ -83,6 +83,7 @@ def calculate_costs(batteries):
     for battery in batteries:
         for route in battery.routes:
             cost += route.get_length()*ROUTE_COST
+
     return cost
 
 
