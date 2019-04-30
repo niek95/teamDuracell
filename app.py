@@ -1,6 +1,5 @@
 import sys
 import algorithms
-import visualize
 from battery import Battery
 from house import House
 import matplotlib.pyplot as plt
@@ -99,7 +98,6 @@ def visualize(batteries):
     plt.show()
 
 
-#linewidth = 8, markersize = 5, color = 'blue', linestyle = '-', marker = '')
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Usage: app.py neighbourhood_no algorithm_no")
