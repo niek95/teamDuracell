@@ -40,9 +40,6 @@ def connect_greedy(batteries, houses):
 
         sorted_batteries = countSort2(sorted_batteries)        
         sorted_batteries[0][1].connect_house(house)
-        print(sorted_batteries[0])
-        counter += 1
-        print(counter)
         
     return len(houses) == 150
 
