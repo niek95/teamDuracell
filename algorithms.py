@@ -54,6 +54,8 @@ def constraint_relaxation(batteries, houses):
     """
     houses = houses
     batteries = batteries
+    # distances contains a number of lists, one for each battery,
+    # containing tuples of houses and distances to the corresponding battery
     distances = []
     for battery in batteries:
         unsorted = []
@@ -67,9 +69,12 @@ def constraint_relaxation(batteries, houses):
         closest = distances[0][0]
         id = 0
         for i in range(len(distances)):
+            # check the first element of eacht list if it is closer than the
+            # previous one
             if distances[i][0][0] < closest[0]:
                 closest = distances[i][0]
                 id = i
+        # connect the closest house
         batteries[id].connect_house(closest[1])
         houses.remove(closest[1])
         for d in distances:
@@ -107,7 +112,3 @@ def turn_by_turn(batteries, houses):
                         d.remove(house)
             i += 1
     return len(houses) == 0
-
-
-def new_algorithm():
-    return "TODO"
