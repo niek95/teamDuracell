@@ -34,6 +34,7 @@ def main():
     for battery in batteries:
         print(battery.get_used_cap())
     print(calculate_costs(batteries))
+    visualize(batteries)
 
 
 def import_batteries(file):
@@ -81,11 +82,20 @@ def calculate_costs(batteries):
     for battery in batteries:
         for route in battery.routes:
             cost += route.get_length()*ROUTE_COST
-            for i in route.get_coordinates():
-                #print(i[0], i[1])
-                plt.plot(i[1] ,i[0] , 'ro--')
-    plt.show()
+
     return cost
+
+
+def visualize(batteries):
+    # Iterate over the batteries to find the route with the corresponding house
+    for battery in batteries:
+        for route in battery.routes:
+            # Retrieve the route between battery and house
+            routes = [(tup1, tup2) for tup1, tup2 in route.get_coordinates()]
+            plt.plot(*zip(*routes), linewidth = 1, linestyle = 'solid', marker = 'o', markersize = 1, color = 'blue')
+    # Show the route in a grid
+    plt.grid()
+    plt.show()
 
 
 if __name__ == "__main__":
