@@ -1,3 +1,5 @@
+from route import Route
+
 MAX_DISTANCE = 100
 
 
@@ -60,3 +62,32 @@ def countSort2(houses):
             for house in count[i][1]:
                 sorted.append(house)
     return sorted
+
+def switch(route1, route2):
+    battery1 = route1.get_battery()
+    battery2 = route2.get_battery()
+    house1 = route1.get_house()
+    house2 = route2.get_house()
+    house1.add_route(battery2)
+    house2.add_route(battery1)
+    battery1.connect_house(house2)
+    battery2.connect_house(house1)
+    return house1.get_route(), house2.get_route()
+
+def check_switch(route1, route2):
+    battery1 = route1.get_battery()
+    battery2 = route2.get_battery()
+    house1 = route1.get_house()
+    house2 = route2.get_house()
+    length1 = route1.get_length()
+    length2 = route2.get_length()
+    total_length1 = length1 + length2
+    route1 = Route(house2, battery1)
+    route2 = Route(house1, battery2)
+    length1 = route1.get_length()
+    length2 = route2.get_length()
+    total_length2 = length1 + length2
+    if total_length2 < total_length1:
+        return True
+    else:
+        return False
