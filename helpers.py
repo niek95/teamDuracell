@@ -1,5 +1,5 @@
 from route import Route
-
+from app import calculate_costs
 MAX_DISTANCE = 100
 
 
@@ -84,12 +84,15 @@ def check_switch(route1, route2):
     length1 = route1.get_length()
     length2 = route2.get_length()
     total_length1 = length1 + length2
-    route1 = Route(house2, battery1)
-    route2 = Route(house1, battery2)
-    length1 = route1.get_length()
-    length2 = route2.get_length()
-    total_length2 = length1 + length2
+    route3 = Route(house2, battery1)
+    route4 = Route(house1, battery2)
+    length3 = route3.get_length()
+    length4 = route4.get_length()
+    total_length2 = length3 + length4
+    change = total_length1 - total_length2
+    #print("route1 : ", total_length1, "route2: ", total_length2)
     if total_length2 < total_length1:
-        return True
+        print(change)
+        return True, change
     else:
         return False

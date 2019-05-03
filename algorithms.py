@@ -11,15 +11,16 @@ def connect_basic(batteries, houses):
     connected_houses = []
 
     # returns true if all houses connected, false otherwise
-    for battery in batteries:
-        while battery.get_used_cap() < battery.get_capacity():
+    for battery in batteries:          
+        for house in houses:
             cap_left = battery.get_capacity() - battery.get_used_cap()
-            for house in houses:
-                if house.get_output() < cap_left:
-                    battery.connect_house(house)
-                    connected_houses.append(house)
-                    houses.remove(house)
-            break
+            if house.get_output() < cap_left:
+                battery.connect_house(house)
+                connected_houses.append(house)
+                houses.remove(house)
+            else:
+                print(house.get_output())
+    print(len(houses))
     return len(houses) == 0
 
 
@@ -34,7 +35,7 @@ def connect_greedy(batteries, houses):
         sorted_batteries = []
         for battery in batteries:
             route = Route(house, battery)
-            cap_left = battery.get_capacity() - battery.get_used_cap()
+            cap_left = battery.get_capacity() - battery.get_used_cap() - 1
             if house.get_output() < cap_left:
                 sorted_batteries.append((route.get_length(), battery))
 
@@ -45,42 +46,54 @@ def connect_greedy(batteries, houses):
 
 
 def connect_greedy_hillclimb(batteries, houses):
-    # List of all the connected houses
     houses = houses
-    batteries = batteries
-    routes = []
-    counter = 0
-    for house in houses:
-        sorted_batteries = []
-        for battery in batteries:
-            route = Route(house, battery)
-            routes.append((route.get_length(), route))
-            cap_left = battery.get_capacity() - battery.get_used_cap()
-            if house.get_output() < cap_left:
-                sorted_batteries.append((route.get_length(), battery))
+    batteries1 = batteries
 
-        sorted_batteries = countSort2(sorted_batteries)        
-        sorted_batteries[0][1].connect_house(house)
-    
+    connect_greedy(batteries, houses)
+    routes = []
+    for battery in batteries:
+        for i in battery.routes:
+            routes.append((i.get_length(), i))
+
     sorted_routes = countSort2(routes)
     costs_before = calculate_costs(batteries)
     i = 0
     while i < 150:
-        route1 = sorted_routes[len(sorted_routes) - (i + 1)][1]
-        route2 = sorted_routes[i][1]
-        if check_switch(route1, route2):
-            sorted_routes.remove((route1.get_length(), route1))
-            sorted_routes.remove((route2.get_length(), route2))
-            routes1 = switch(route2, route1)
-            route1 = routes1[0]
-            route2 = routes1[1]
-            sorted_routes.append((route1.get_length(), route1))
-            sorted_routes.append((route2.get_length(), route2))
-            sorted_routes = countSort2(sorted_routes)
-            i = 0
-        else:
-            i += 1
-    return len(houses) == 150
+        j = 0
+        changed = 0
+        permanent_route1 = None
+        permanent_route2 = None
+        while j < 150 - i:
+            #print(j)
+            route1 = sorted_routes[len(sorted_routes) - (i + 1)][1]
+            route2 = sorted_routes[j][1]
+            if check_switch(route1, route2):
+                if check_switch(route1, route2):                    
+                    if check_switch(route1, route2)[1] > changed:
+                        permanent_route1 = route1
+                        permanent_route2 = route2
+                        changed = check_switch(route1, route2)[1]
+                        
+                if j == 149 - i:
+                    # if permanent_route1 is not None:
+                    sorted_routes.remove((route1.get_length(), route1))
+                    sorted_routes.remove((route2.get_length(), route2))
+                    routes1 = switch(permanent_route2, permanent_route1)
+                    route1 = routes1[0]
+                    route2 = routes1[1]
+                    sorted_routes.append((route1.get_length(), route1))
+                    sorted_routes.append((route2.get_length(), route2))
+                    sorted_routes = countSort2(sorted_routes)
+                    costs_before = calculate_costs(batteries)
+                    print("joe")
+            j += 1
+        i += 1
+    for battery in batteries:
+        battery.routes = []
+        for route in sorted_routes:
+            if route[1].get_battery() == battery:
+                battery.routes.append(route[1])                     
+    return len(houses) == 0
 
 
 def constraint_relaxation(batteries, houses):
