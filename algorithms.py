@@ -1,7 +1,6 @@
 from helpers import countSort2
 from route import Route
 import random
-from app import calculate_costs
 from helpers import check_switch_cap
 from helpers import switch
 
@@ -16,17 +15,15 @@ def connect_basic(batteries, houses):
 
     # returns true if all houses connected, false otherwise
     for battery in batteries:
+        connected_houses = []
         for house in houses:
             cap_left = battery.get_capacity() - battery.get_used_cap()
-            print(cap_left)
-            print(house.get_output())
-            possible = (house.get_output() < cap_left)
-            print(possible)
             if house.get_output() < cap_left:
-                print("fuckyou")
+                print("connecting")
                 battery.connect_house(house)
                 connected_houses.append(house)
-                houses.remove(house)
+        for house in connected_houses:
+            houses.remove(house)
     return len(houses) == 0
 
 
