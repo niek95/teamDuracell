@@ -74,7 +74,6 @@ def switch(route1, route2):
     house2.add_route(battery1)
     battery1.connect_house(house2)
     battery2.connect_house(house1)
-    print("switched")
     return house1.get_route(), house2.get_route()
 
 def check_switch(route1, route2):

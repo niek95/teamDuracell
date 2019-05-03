@@ -100,7 +100,7 @@ def constraint_relaxation(batteries, houses):
             for tuple in d:
                 if tuple[1] == closest[1]:
                     d.remove(tuple)
-    apply_constraints(batteries)
+    return apply_constraints(batteries)
 
 
 def apply_constraints(batteries):
@@ -126,7 +126,6 @@ def apply_constraints(batteries):
             battery_2 = under_cap[random.randrange(len(under_cap))]
             if (battery_2.get_capacity() - battery_2.get_used_cap()) > house.get_output():
                 battery.remove_route(house.get_route())
-                print(battery_2.get_used_cap())
                 battery_2.connect_house(house)
         # remove batteries from over_cap if they satisfy constraints
         for battery in over_cap:
@@ -140,22 +139,22 @@ def apply_constraints(batteries):
         for battery in batteries:
             if (battery.get_used_cap() - battery.get_capacity()) > battery.get_capacity() * SWITCH_THRESHOLD:
                 within_range = False
-#            print(battery.get_used_cap())
         if within_range is True:
-            switch_constraints(over_cap, under_cap)
+            return switch_constraints(over_cap, under_cap)
 
 
 def switch_constraints(over_cap, under_cap):
+    # keep checking if the constraints are satisfied
     while check_satisfied(over_cap) is False:
+        # pick two random routes to switch, and do so if it helps the cap
         for battery in over_cap:
             routes_1 = battery.get_routes()
             route_1 = routes_1[random.randrange(len(routes_1))]
             routes_2 = under_cap[random.randrange(len(under_cap))].get_routes()
             route_2 = routes_2[random.randrange(len(routes_2))]
-#            print("checking")
             if check_switch_cap(route_1, route_2):
                 switch(route_1, route_2)
-
+    return check_satisfied(over_cap)
 
 def check_satisfied(batteries):
     for battery in batteries:
