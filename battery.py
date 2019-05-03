@@ -30,3 +30,6 @@ class Battery(object):
 
     def get_routes(self):
         return self.routes
+
+    def get_over_cap(self):
+        return self.used_cap > self.capacity

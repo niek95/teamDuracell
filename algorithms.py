@@ -1,5 +1,7 @@
 from helpers import countSort2
 from route import Route
+import random
+from app import calculate_costs
 
 
 def connect_basic(batteries, houses):
@@ -38,9 +40,9 @@ def connect_greedy(batteries, houses):
             if house.get_output() < cap_left:
                 sorted_batteries.append((route.get_length(), battery))
 
-        sorted_batteries = countSort2(sorted_batteries)        
+        sorted_batteries = countSort2(sorted_batteries)
         sorted_batteries[0][1].connect_house(house)
-        
+
     return len(houses) == 150
 
 
@@ -96,8 +98,37 @@ def constraint_relaxation(batteries, houses):
             for tuple in d:
                 if tuple[1] == closest[1]:
                     d.remove(tuple)
-    return len(houses) == 0
+    apply_constraints(batteries)
 
+
+def apply_constraints(batteries):
+    """
+    Randomly removes routes from over capacity batteries
+    until constraints are satisfied
+    """
+    over_cap = []
+    under_cap = []
+    for battery in batteries:
+        if battery.get_over_cap():
+            over_cap.append(battery)
+        else:
+            under_cap.append(battery)
+    while check_satisfied(batteries) is False:
+        for battery in over_cap:
+            routes = battery.get_routes()
+            house = routes[random.randrange(len(routes))].get_house()
+            print(calculate_costs(batteries))
+            battery_2 = under_cap[random.randrange(len(under_cap))]
+            if (battery_2.get_capacity() - battery_2.get_used_cap()) > house.get_output():
+                battery_2.connect_house(house)
+                battery.remove_house(house)
+
+
+def check_satisfied(batteries):
+    for battery in batteries:
+        if battery.get_used_cap() > battery.get_capacity():
+            return False
+    return True
 
 def turn_by_turn(batteries, houses):
     """
@@ -126,4 +157,4 @@ def turn_by_turn(batteries, houses):
                     if house[1] == closest_house[1]:
                         d.remove(house)
             i += 1
-    return len(houses) == 0
+    apply_constraints(batteries)
