@@ -23,6 +23,7 @@ class Battery(object):
 
     def remove_route(self, route):
         self.routes.remove(route)
+        self.used_cap -= route.get_house().get_output()
 
     def get_x(self):
         return self.x_bat

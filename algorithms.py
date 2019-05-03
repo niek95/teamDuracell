@@ -2,6 +2,8 @@ from helpers import countSort2
 from route import Route
 import random
 from app import calculate_costs
+from helpers import check_switch_cap
+from helpers import switch
 
 
 def connect_basic(batteries, houses):
@@ -106,6 +108,8 @@ def apply_constraints(batteries):
     Randomly removes routes from over capacity batteries
     until constraints are satisfied
     """
+    # check which batteries are still over cap
+    SWITCH_THRESHOLD = 0.05
     over_cap = []
     under_cap = []
     for battery in batteries:
@@ -113,15 +117,44 @@ def apply_constraints(batteries):
             over_cap.append(battery)
         else:
             under_cap.append(battery)
-    while check_satisfied(batteries) is False:
+    # until constraints are satisfied, take random route from the over_cap
+    # battery and try to find a place for it in an under_cap battery
+    while not check_satisfied(batteries):
         for battery in over_cap:
             routes = battery.get_routes()
             house = routes[random.randrange(len(routes))].get_house()
-            print(calculate_costs(batteries))
             battery_2 = under_cap[random.randrange(len(under_cap))]
             if (battery_2.get_capacity() - battery_2.get_used_cap()) > house.get_output():
+                battery.remove_route(house.get_route())
+                print(battery_2.get_used_cap())
                 battery_2.connect_house(house)
-                battery.remove_house(house)
+        # remove batteries from over_cap if they satisfy constraints
+        for battery in over_cap:
+            if not battery.get_over_cap():
+                over_cap.remove(battery)
+                under_cap.append(battery)
+        if check_satisfied(batteries):
+            return True
+        # check if batteries are close enough to capacity to start switching
+        within_range = True
+        for battery in batteries:
+            if (battery.get_used_cap() - battery.get_capacity()) > battery.get_capacity() * SWITCH_THRESHOLD:
+                within_range = False
+#            print(battery.get_used_cap())
+        if within_range is True:
+            switch_constraints(over_cap, under_cap)
+
+
+def switch_constraints(over_cap, under_cap):
+    while check_satisfied(over_cap) is False:
+        for battery in over_cap:
+            routes_1 = battery.get_routes()
+            route_1 = routes_1[random.randrange(len(routes_1))]
+            routes_2 = under_cap[random.randrange(len(under_cap))].get_routes()
+            route_2 = routes_2[random.randrange(len(routes_2))]
+#            print("checking")
+            if check_switch_cap(route_1, route_2):
+                switch(route_1, route_2)
 
 
 def check_satisfied(batteries):
@@ -129,6 +162,7 @@ def check_satisfied(batteries):
         if battery.get_used_cap() > battery.get_capacity():
             return False
     return True
+
 
 def turn_by_turn(batteries, houses):
     """
