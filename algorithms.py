@@ -16,14 +16,17 @@ def connect_basic(batteries, houses):
 
     # returns true if all houses connected, false otherwise
     for battery in batteries:
-        while battery.get_used_cap() < battery.get_capacity():
+        for house in houses:
             cap_left = battery.get_capacity() - battery.get_used_cap()
-            for house in houses:
-                if house.get_output() < cap_left:
-                    battery.connect_house(house)
-                    connected_houses.append(house)
-                    houses.remove(house)
-            break
+            print(cap_left)
+            print(house.get_output())
+            possible = (house.get_output() < cap_left)
+            print(possible)
+            if house.get_output() < cap_left:
+                print("fuckyou")
+                battery.connect_house(house)
+                connected_houses.append(house)
+                houses.remove(house)
     return len(houses) == 0
 
 
