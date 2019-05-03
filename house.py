@@ -8,6 +8,9 @@ class House(object):
     def add_route(self, route):
         self.route = route
 
+    def get_route(self):
+        return self.route
+
     def get_id(self):
         return self.id
 

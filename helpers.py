@@ -66,6 +66,8 @@ def countSort2(houses):
 def switch(route1, route2):
     battery1 = route1.get_battery()
     battery2 = route2.get_battery()
+    battery1.remove_route(route1)
+    battery2.remove_route(route2)
     house1 = route1.get_house()
     house2 = route2.get_house()
     house1.add_route(battery2)

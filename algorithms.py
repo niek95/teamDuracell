@@ -1,6 +1,6 @@
-from helpers import countSort2
+from helpers import countSort2, switch, check_switch
 from route import Route
-
+from app import calculate_costs
 
 def connect_basic(batteries, houses):
     """
@@ -46,20 +46,41 @@ def connect_greedy(batteries, houses):
 
 def connect_greedy_hillclimb(batteries, houses):
     # List of all the connected houses
-    connected_houses = []
-    # List of sorted houses
-    sorted_houses = []
-
-    # Iterate over the batteries and houses
-    for battery in batteries:
-        for house in houses:
+    houses = houses
+    batteries = batteries
+    routes = []
+    counter = 0
+    for house in houses:
+        sorted_batteries = []
+        for battery in batteries:
             route = Route(house, battery)
-            sorted_houses.append((route.get_length(), house))
-        sorted_houses = countSort2(sorted_houses)
+            routes.append((route.get_length(), route))
+            cap_left = battery.get_capacity() - battery.get_used_cap()
+            if house.get_output() < cap_left:
+                sorted_batteries.append((route.get_length(), battery))
 
-        # Connect huizen random en kijk of afstand van huis naar batterij de kortste is dmv sorted2, zo ja: append aan connected_houses, anders connect nieuw huis
-
-    return "TODO"
+        sorted_batteries = countSort2(sorted_batteries)        
+        sorted_batteries[0][1].connect_house(house)
+    
+    sorted_routes = countSort2(routes)
+    costs_before = calculate_costs(batteries)
+    i = 0
+    while i < 150:
+        route1 = sorted_routes[len(sorted_routes) - (i + 1)][1]
+        route2 = sorted_routes[i][1]
+        if check_switch(route1, route2):
+            sorted_routes.remove((route1.get_length(), route1))
+            sorted_routes.remove((route2.get_length(), route2))
+            routes1 = switch(route2, route1)
+            route1 = routes1[0]
+            route2 = routes1[1]
+            sorted_routes.append((route1.get_length(), route1))
+            sorted_routes.append((route2.get_length(), route2))
+            sorted_routes = countSort2(sorted_routes)
+            i = 0
+        else:
+            i += 1
+    return len(houses) == 150
 
 
 def constraint_relaxation(batteries, houses):
