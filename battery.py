@@ -27,3 +27,6 @@ class Battery(object):
 
     def get_used_cap(self):
         return self.used_cap
+
+    def get_routes(self):
+        return self.routes
