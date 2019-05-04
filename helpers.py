@@ -51,7 +51,7 @@ def countSort2(houses):
         length = tuple[0]
         count[length-1][0] += 1
         count[length-1][1].append(tuple)
-        
+
     for i in range(1, len(count)):
         count[i][0] += count[i - 1][0]
 
@@ -74,7 +74,7 @@ def switch(route1, route2):
     house2.add_route(battery1)
     battery1.connect_house(house2)
     battery2.connect_house(house1)
-    return house1.get_route(), house2.get_route()
+    return (house1.get_route().get_length(), house1.get_route()), (house2.get_route().get_length(), house2.get_route())
 
 def check_switch(route1, route2):
     battery1 = route1.get_battery()
@@ -90,9 +90,19 @@ def check_switch(route1, route2):
     length4 = route4.get_length()
     total_length2 = length3 + length4
     change = total_length1 - total_length2
-    #print("route1 : ", total_length1, "route2: ", total_length2)
-    if total_length2 < total_length1:
-        print(change)
+    cap_left1 = battery1.get_capacity() - battery1.get_used_cap() + house1.get_output() 
+    cap_left2 = battery2.get_capacity() - battery2.get_used_cap() + house2.get_output()
+    if total_length2 < total_length1 and house2.get_output() < cap_left1 and house1.get_output() < cap_left2:
+        #print("cap_left1: ", cap_left1, house2.get_output(), "capleft2: ", cap_left2, house1.get_output())
         return True, change
     else:
         return False
+
+
+def check_switch_cap(route_1, route_2):
+    battery_2 = route_2.get_battery()
+    house_1 = route_1.get_house()
+    house_2 = route_2.get_house()
+    difference = house_1.get_output() - house_2.get_output()
+    if difference > 0:
+        return (battery_2.get_used_cap() + difference) < battery_2.get_capacity()

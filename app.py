@@ -28,7 +28,14 @@ def main():
         connected = algorithms.constraint_relaxation(batteries, houses)
     else:
         print("we haven't implemented that yet")
-        sys.exit(1)
+        sys.exit(1) 
+    if sys.argv[3] == "0" or sys.argv[3] == None:
+        print("no third algorithm")
+    elif sys.argv[3] == "1": 
+        connected1 = algorithms.hillclimb1(batteries, houses)
+    elif sys.argv[3] == "2":
+        connected1 = algorithms.hillclimb1(batteries, houses)
+
     # print true if all houses connected, and total price
     print(connected)
     for battery in batteries:
@@ -105,7 +112,7 @@ def visualize(batteries):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: app.py neighbourhood_no algorithm_no")
-        sys.exit(1)
+    # if len(sys.argv) != 3 ):
+    #     print("Usage: app.py neighbourhood_no algorithm_no")
+    #     sys.exit(1)
     main()
