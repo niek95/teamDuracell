@@ -1,8 +1,8 @@
 class House(object):
     def __init__(self, id, x, y, output):
         self.id = id
-        self.x_house = x
-        self.y_house = y
+        self.x_house = int(x)
+        self.y_house = int(y)
         self.output = output
 
     def add_route(self, route):
