@@ -22,6 +22,7 @@ def main():
         connected = algorithms.connect_greedy(batteries, houses)
     elif sys.argv[2] == "3":
         connected = algorithms.constraint_relaxation(batteries, houses)
+   
     else:
         print("we haven't implemented that yet")
         sys.exit(1) 

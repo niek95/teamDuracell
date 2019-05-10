@@ -1,8 +1,8 @@
 from helpers import countSort2, switch, check_switch
 from route import Route
 import random
-from helpers import check_switch_cap
-from helpers import switch
+from helpers import check_switch_cap, switch
+
 
 
 def connect_basic(batteries, houses):
@@ -47,16 +47,21 @@ def connect_greedy(batteries, houses):
     return len(houses) == 150
 
 def hillclimb(batteries, houses):
+    # first get all the routes from the previous algorithm
+
     batteries = batteries
     houses = houses
     routes = []
+
     for battery in batteries:
         for route in battery.routes:
             routes.append((route.get_length(), route))
 
+    # sort all those routes
     sorted_routes = countSort2(routes)
     i = 0
-    no_result = 0
+    changed = 0
+    # keep going through the whole list of routes untill the end
     while i < len(sorted_routes):
         route1 = sorted_routes[len(sorted_routes) - (i + 1)]
         j = 0
@@ -80,6 +85,7 @@ def hillclimb(batteries, houses):
                 sorted_routes = countSort2(sorted_routes)
                 j = -1
                 i = 0
+                changed += 1
                 permanent_route1 = None
             j += 1
         i += 1
@@ -180,3 +186,4 @@ def check_satisfied(batteries):
         if battery.get_used_cap() > battery.get_capacity():
             return False
     return True
+
