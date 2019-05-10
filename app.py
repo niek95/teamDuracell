@@ -21,20 +21,20 @@ def main():
     elif sys.argv[2] == "2":
         connected = algorithms.connect_greedy(batteries, houses)
     elif sys.argv[2] == "3":
-        connected = algorithms.connect_greedy_hillclimb(batteries, houses)
-    elif sys.argv[2] == "4":
-        connected = algorithms.turn_by_turn(batteries, houses)
-    elif sys.argv[2] == "5":
         connected = algorithms.constraint_relaxation(batteries, houses)
     else:
         print("we haven't implemented that yet")
         sys.exit(1) 
-    if sys.argv[3] == "0" or sys.argv[3] == None:
+    try:
+        if sys.argv[3] == "0" or sys.argv[3] == None:
+            print("no third algorithm")
+        elif sys.argv[3] == "1": 
+            connected1 = algorithms.hillclimb(batteries, houses)
+        else:
+            print("we haven't implemented that yet")
+            sys.exit(1) 
+    except:
         print("no third algorithm")
-    elif sys.argv[3] == "1": 
-        connected1 = algorithms.hillclimb1(batteries, houses)
-    elif sys.argv[3] == "2":
-        connected1 = algorithms.hillclimb1(batteries, houses)
 
     # print true if all houses connected, and total price
     print(connected)
@@ -112,7 +112,4 @@ def visualize(batteries):
 
 
 if __name__ == "__main__":
-    # if len(sys.argv) != 3 ):
-    #     print("Usage: app.py neighbourhood_no algorithm_no")
-    #     sys.exit(1)
     main()

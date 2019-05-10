@@ -46,7 +46,7 @@ def connect_greedy(batteries, houses):
 
     return len(houses) == 150
 
-def hillclimb1(batteries, houses):
+def hillclimb(batteries, houses):
     batteries = batteries
     houses = houses
     routes = []
@@ -84,61 +84,6 @@ def hillclimb1(batteries, houses):
             j += 1
         i += 1
     return len(houses) == 150
-
-def hillclimb(batteries, houses):
-    return "TODO"
-
-
-def connect_greedy_hillclimb(batteries, houses):
-    # houses = houses
-    # batteries1 = batteries
-
-    # connect_greedy(batteries, houses)
-    # routes = []
-    # for battery in batteries:
-    #     for i in battery.routes:
-    #         routes.append((i.get_length(), i))
-
-    # sorted_routes = countSort2(routes)
-    # costs_before = calculate_costs(batteries)
-    # i = 0
-    # while i < 150:
-    #     j = 0
-    #     changed = 0
-    #     permanent_route1 = None
-    #     permanent_route2 = None
-    #     while j < 150 - i:
-    #         #print(j)
-    #         route1 = sorted_routes[len(sorted_routes) - (i + 1)][1]
-    #         route2 = sorted_routes[j][1]
-    #         if check_switch(route1, route2):
-    #             if check_switch(route1, route2):                    
-    #                 if check_switch(route1, route2)[1] > changed:
-    #                     permanent_route1 = route1
-    #                     permanent_route2 = route2
-    #                     changed = check_switch(route1, route2)[1]
-                        
-    #             if j == 149 - i:
-    #                 # if permanent_route1 is not None:
-    #                 sorted_routes.remove((route1.get_length(), route1))
-    #                 sorted_routes.remove((route2.get_length(), route2))
-    #                 routes1 = switch(permanent_route2, permanent_route1)
-    #                 route1 = routes1[0]
-    #                 route2 = routes1[1]
-    #                 sorted_routes.append((route1.get_length(), route1))
-    #                 sorted_routes.append((route2.get_length(), route2))
-    #                 sorted_routes = countSort2(sorted_routes)
-    #                 costs_before = calculate_costs(batteries)
-    #                 print("joe")
-    #         j += 1
-    #     i += 1
-    # for battery in batteries:
-    #     battery.routes = []
-    #     for route in sorted_routes:
-    #         if route[1].get_battery() == battery:
-    #             battery.routes.append(route[1])                     
-    return len(houses) == 0
-
 
 def constraint_relaxation(batteries, houses):
     """
@@ -235,34 +180,3 @@ def check_satisfied(batteries):
         if battery.get_used_cap() > battery.get_capacity():
             return False
     return True
-
-
-def turn_by_turn(batteries, houses):
-    """
-    Goes through each battery turn by turn, adding the closest house possible
-    afterwards routes should be switched until constraints are satisfied
-    Still have to do the last part
-    """
-    houses = houses
-    batteries = batteries
-    distances = []
-    for battery in batteries:
-        unsorted = []
-        for house in houses:
-            route = Route(house, battery)
-            unsorted.append((route.get_length(), house))
-        sorted_houses = countSort2(unsorted)
-        distances.append(sorted_houses)
-
-    while len(houses) > 0:
-        for i in range(len(distances)):
-            closest_house = distances[i][0]
-            batteries[i].connect_house(closest_house[1])
-            houses.remove(closest_house[1])
-            for d in distances:
-                for house in d:
-                    if house[1] == closest_house[1]:
-                        d.remove(house)
-            i += 1
-    apply_constraints(batteries)
-    return "TODO"
