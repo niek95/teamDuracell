@@ -26,6 +26,12 @@ class Battery(object):
     def get_y(self):
         return self.y_bat
 
+    def set_x(self, x):
+        self.x_bat = x
+
+    def set_y(self, y):
+        self.y_bat = y
+
     def get_capacity(self):
         return self.capacity
 

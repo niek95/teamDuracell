@@ -14,8 +14,12 @@ def main():
         "2": ("Data/wijk2_batterijen.txt", "Data/wijk2_huizen.txt"),
         "3": ("Data/wijk3_batterijen.txt", "Data/wijk3_huizen.txt")
     }
-    batteries = import_batteries(switcher[sys.argv[1]][0])
     houses = import_houses(switcher[sys.argv[1]][1])
+    batteries = import_batteries(switcher[sys.argv[1]][0], houses)
+    
+
+    for house in houses:
+        plt.plot(house.get_x(),house.get_y() ,'o', color = 'black', markersize=2)
     # run algorithm of choice
     if sys.argv[2] == "1":
         connected = algorithms.connect_basic(batteries, houses)
@@ -30,6 +34,7 @@ def main():
         if sys.argv[3] == "0" or sys.argv[3] == None:
             print("no third algorithm")
         elif sys.argv[3] == "1":
+            visualize(batteries, houses)
             connected1 = algorithms.hillclimb(batteries, houses)
         else:
             print("we haven't implemented that yet")
@@ -43,17 +48,31 @@ def main():
         print(battery.get_used_cap())
     print(calculate_costs(batteries))
     visualize(batteries, houses)
+    plt.show()
 
 
-def import_batteries(file):
+def import_batteries(file, houses):
     batteries = []
     try:
         with open(file, "r") as f:
+            coordinates = algorithms.change_batteries(houses)
+            prompt = input("wilt u de batterijen verplaatsen met k-means? y / n ?")
             id = 0
             for line in f:
                 lines = line.split(',')
-                x_battery = lines[0]
-                y_battery = lines[1]
+                
+                if "y" in prompt:
+                    for house in houses:
+                        center1 = round(coordinates[id][0],0)
+                        center2 = round(coordinates[id][1],0)
+                        if house.get_x() == center1 and house.get_y() == center2:
+                            center1 += 1
+                            center2 += 1
+                        x_battery = center1
+                        y_battery = center2
+                else:
+                    x_battery = lines[0]
+                    y_battery = lines[1]
                 max_input = lines[2].strip()
                 max_input = float(max_input)
                 battery = Battery(id, x_battery, y_battery, max_input)
@@ -96,6 +115,8 @@ def calculate_costs(batteries):
 
 def visualize(batteries, houses):
     #Iterate over the batteries to find the route with the corresponding house
+    
+    
     for battery in batteries:
         plt.plot(battery.get_x(),battery.get_y() ,'X', color = 'black', markersize=12)
         for route in battery.get_routes():
@@ -104,18 +125,14 @@ def visualize(batteries, houses):
             if length < 40:
                 routes = [(tup1, tup2) for tup1, tup2 in route.get_coordinates()]
                 plt.plot(*zip(*routes), linewidth = 1, linestyle = 'solid', marker = 'o', markersize = 1, color = 'blue')
+                plt.pause(0.1)
             else:
                 routes = [(tup1, tup2) for tup1, tup2 in route.get_coordinates()]
                 plt.plot(*zip(*routes), linewidth = 1, linestyle = 'solid', marker = 'o', markersize = 1, color = 'red')
-    for house in houses:
-        plt.plot(house.get_x(),house.get_y() ,'o', color = 'black', markersize=5)
+                plt.pause(0.1)
+    
     # Show the route in a grid
-    for house in houses:
-        plt.plot(house.get_x(),house.get_y(),'bo')
     plt.grid()
-    plt.show()
-
-
 
 if __name__ == "__main__":
     main()
