@@ -23,18 +23,17 @@ def main():
         connected = algorithms.connect_greedy(batteries, houses)
     elif sys.argv[2] == "3":
         connected = algorithms.constraint_relaxation(batteries, houses)
-            
     else:
         print("we haven't implemented that yet")
-        sys.exit(1) 
+        sys.exit(1)
     try:
         if sys.argv[3] == "0" or sys.argv[3] == None:
             print("no third algorithm")
-        elif sys.argv[3] == "1": 
+        elif sys.argv[3] == "1":
             connected1 = algorithms.hillclimb(batteries, houses)
         else:
             print("we haven't implemented that yet")
-            sys.exit(1) 
+            sys.exit(1)
     except:
         print("no third algorithm")
 
@@ -96,7 +95,7 @@ def calculate_costs(batteries):
 
 
 def visualize(batteries, houses):
-    # Iterate over the batteries to find the route with the corresponding house
+    #Iterate over the batteries to find the route with the corresponding house
     for battery in batteries:
         plt.plot(battery.get_x(),battery.get_y() ,'X', color = 'black', markersize=12)
         for route in battery.get_routes():
@@ -108,11 +107,14 @@ def visualize(batteries, houses):
             else:
                 routes = [(tup1, tup2) for tup1, tup2 in route.get_coordinates()]
                 plt.plot(*zip(*routes), linewidth = 1, linestyle = 'solid', marker = 'o', markersize = 1, color = 'red')
+    for house in houses:
+        plt.plot(house.get_x(),house.get_y() ,'o', color = 'black', markersize=5)
     # Show the route in a grid
     for house in houses:
         plt.plot(house.get_x(),house.get_y(),'bo')
     plt.grid()
     plt.show()
+
 
 
 if __name__ == "__main__":

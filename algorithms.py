@@ -186,4 +186,3 @@ def check_satisfied(batteries):
         if battery.get_used_cap() > battery.get_capacity():
             return False
     return True
-
