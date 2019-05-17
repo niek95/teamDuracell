@@ -110,8 +110,6 @@ def visualize(batteries, houses):
     for house in houses:
         plt.plot(house.get_x(),house.get_y() ,'o', color = 'black', markersize=5)
     # Show the route in a grid
-    for house in houses:
-        plt.plot(house.get_x(),house.get_y(),'bo')
     plt.grid()
     plt.show()
 
