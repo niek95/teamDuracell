@@ -2,8 +2,8 @@ from helpers import countSort2, switch, check_switch
 from route import Route
 import random
 from helpers import check_switch_cap, switch
-
-
+from sklearn.cluster import KMeans
+import numpy as np
 
 def connect_basic(batteries, houses):
     """
@@ -186,3 +186,15 @@ def check_satisfied(batteries):
         if battery.get_used_cap() > battery.get_capacity():
             return False
     return True
+
+def change_batteries(houses):
+    coordinates = []
+    for house in houses:
+        coordinate = []
+        coordinate.append(house.get_x())
+        coordinate.append(house.get_y())
+        coordinates.append(coordinate)
+    kmeans = KMeans(n_clusters=5, random_state=0).fit(coordinates)
+    centers = kmeans.cluster_centers_
+    
+    return centers
