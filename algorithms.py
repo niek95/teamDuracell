@@ -33,17 +33,17 @@ def connect_greedy(batteries, houses):
     houses = houses
     batteries = batteries
     counter = 0
+    connected_house = []
+
     for house in houses:
         sorted_batteries = []
         for battery in batteries:
             route = Route(house, battery)
-            cap_left = battery.get_capacity() - battery.get_used_cap() - 1
+            cap_left = battery.get_capacity() - battery.get_used_cap()
             if house.get_output() < cap_left:
                 sorted_batteries.append((route.get_length(), battery))
-
         sorted_batteries = countSort2(sorted_batteries)
         sorted_batteries[0][1].connect_house(house)
-
     return len(houses) == 150
 
 def hillclimb(batteries, houses):
@@ -67,7 +67,7 @@ def hillclimb(batteries, houses):
         j = 0
         lowest_save = 0
         permanent_route1 = None
-        while j < len(sorted_routes) :
+        while j < len(sorted_routes):
             route2 = sorted_routes[j]
             if check_switch(route1[1], route2[1]):
                 if check_switch(route1[1], route2[1])[1] > lowest_save:
