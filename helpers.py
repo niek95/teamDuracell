@@ -70,3 +70,16 @@ def check_switch_cap(route_1, route_2):
     difference = house_1.get_output() - house_2.get_output()
     if difference > 0:
         return (battery_2.get_used_cap() + difference) < battery_2.get_capacity()
+
+def check_cross_houses(houses, batteries):
+        count = 0
+        for battery in batteries:
+            count1 = 0
+            for route in battery.get_routes():
+                for house in houses:
+                    house_coordinate = (house.get_x(), house.get_y())
+                    if house_coordinate in route.get_coordinates():
+                        count += 1
+                        count1 += 1
+            print(count1)
+        return count

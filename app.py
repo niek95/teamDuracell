@@ -4,6 +4,7 @@ from battery import Battery
 from house import House
 import matplotlib.pyplot as plt
 import route 
+import helpers
 
 ROUTE_COST = 9
 
@@ -46,6 +47,7 @@ def main():
     print(connected)
     for battery in batteries:
         print(battery.get_used_cap())
+    print(helpers.check_cross_houses(houses, batteries))
     print(calculate_costs(batteries))
     visualize(batteries, houses)
     plt.show()
