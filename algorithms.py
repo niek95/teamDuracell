@@ -1,6 +1,7 @@
 from helpers import countSort2, switch, check_switch
 from route import Route
 import random
+import matplotlib.pyplot as plt
 from helpers import check_switch_cap, switch
 from sklearn.cluster import KMeans
 import numpy as np
@@ -193,11 +194,9 @@ def check_satisfied(batteries):
 def change_batteries(houses):
     coordinates = []
     for house in houses:
-        coordinate = []
-        coordinate.append(house.get_x())
-        coordinate.append(house.get_y())
+        coordinate = ((house.get_x(),house.get_y()))
         coordinates.append(coordinate)
     kmeans = KMeans(n_clusters=5, random_state=0).fit(coordinates)
     centers = kmeans.cluster_centers_
-    
+    plt.scatter(*zip(*coordinates), c=kmeans)
     return centers
