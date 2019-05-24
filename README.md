@@ -7,7 +7,7 @@ Tim de Boer 11202351
 Joost Bankras 12377775
 
 ## Requirements
-Install matplotlib, numpy and scikit_learn, as per requirements.text
+Install matplotlib, numpy and scikit_learn, as per requirements.txt
 
 ## Usage
 ```

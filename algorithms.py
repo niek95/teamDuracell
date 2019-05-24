@@ -1,10 +1,8 @@
-from helpers import countSort2, switch, check_switch
+from helpers import countSort2, switch, check_switch, check_switch_cap
 from route import Route
 import random
-from helpers import check_switch_cap, switch
 from sklearn.cluster import KMeans
-import numpy as np
-import sys
+
 
 def connect_basic(batteries, houses):
     """
@@ -72,7 +70,8 @@ def hillclimb(batteries, houses):
                     permanent_route1 = route1
                     permanent_route2 = route2
                     lowest_save = check_switch(route1[1], route2[1])[1]
-            if j == (len(sorted_routes) - (i + 1)) and permanent_route1 is not None:
+            if j == (len(sorted_routes) - (i + 1)) and \
+               permanent_route1 is not None:
                 sorted_routes.remove(permanent_route1)
                 sorted_routes.remove(permanent_route2)
                 routes = switch(permanent_route1[1], permanent_route2[1])
@@ -150,7 +149,8 @@ def apply_constraints(batteries):
             routes = battery.get_routes()
             house = routes[random.randrange(len(routes))].get_house()
             battery_2 = under_cap[random.randrange(len(under_cap))]
-            if (battery_2.get_capacity() - battery_2.get_used_cap()) > house.get_output():
+            if (battery_2.get_capacity() - battery_2.get_used_cap()) \
+               > house.get_output():
                 battery.remove_route(house.get_route())
                 battery_2.connect_house(house)
         # remove batteries from over_cap if they satisfy constraints
@@ -163,7 +163,8 @@ def apply_constraints(batteries):
         # check if batteries are close enough to capacity to start switching
         within_range = True
         for battery in batteries:
-            if (battery.get_used_cap() - battery.get_capacity()) > battery.get_capacity() * SWITCH_THRESHOLD:
+            if (battery.get_used_cap() - battery.get_capacity()) \
+               > battery.get_capacity() * SWITCH_THRESHOLD:
                 within_range = False
         if within_range is True:
             return switch_constraints(over_cap, under_cap)
