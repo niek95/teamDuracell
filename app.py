@@ -62,7 +62,7 @@ def import_batteries(file, houses):
     try:
         with open(file, "r") as f:
             coordinates = algorithms.change_batteries(houses)
-            prompt = input("wilt u de batterijen verplaatsen met k-means? y / n ?")
+            prompt = input("wilt u de batterijen verplaatsen met k-means of 17 clusters plaatsen? y / n / k ?")
             id = 0
             for line in f:
                 lines = line.split(',')
@@ -84,6 +84,24 @@ def import_batteries(file, houses):
                 battery = Battery(id, x_battery, y_battery, max_input)
                 batteries.append(battery)
                 id += 1
+
+            if "k" in prompt:
+                coordinates = algorithms.change_batteries1(houses)
+                for i in range(0, len(coordinates)):
+                    max_input = 1800
+                    max_input = float(max_input)
+                    for house in houses:
+                        center1 = round(coordinates[i][0], 0)
+                        center2 = round(coordinates[i][1], 0)
+
+                        if house.get_x() == center1 and house.get_y() == center2:
+                            center1 += 1
+                            center2 += 1
+                        x_battery = center1
+                        y_battery = center2
+                    battery = Battery(i, x_battery, y_battery, max_input)
+                    batteries.append(battery)
+
     except IOError:
         print("Couldn't open battery file")
         sys.exit

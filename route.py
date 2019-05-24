@@ -1,5 +1,6 @@
 import route_settings
 
+
 class Route(object):
     def __init__(self, house, battery):
         self._house = house
@@ -80,7 +81,6 @@ class Route(object):
         end_node.g = end_node.h = end_node.f = 0
         open_list.append(start_node)
 
-        # open_list.append(([10,5], 4))
         # While the open list is not empty
         while len(open_list) > 0:
             current_node = open_list[0]
@@ -93,7 +93,6 @@ class Route(object):
             # Pop current node of the open list
             open_list.pop(current_index)
             closed_list.append(current_node)
-            #print(current_node)
             # If current node is the end node we have found the goal, quit
             if current_node == end_node:
                 path = []
