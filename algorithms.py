@@ -4,6 +4,7 @@ import random
 from helpers import check_switch_cap, switch
 from sklearn.cluster import KMeans
 import numpy as np
+import sys
 
 def connect_basic(batteries, houses):
     """
@@ -21,9 +22,8 @@ def connect_basic(batteries, houses):
             if house.get_output() < cap_left:
                 battery.connect_house(house)
                 connected_houses.append(house)
-        for house in connected_houses:
-            houses.remove(house)
-    return len(houses) == 0
+        
+    return len(houses) == 150
 
 
 def connect_greedy(batteries, houses):
@@ -33,18 +33,48 @@ def connect_greedy(batteries, houses):
     houses = houses
     batteries = batteries
     counter = 0
-    connected_house = []
 
-    for house in houses:
-        sorted_batteries = []
-        for battery in batteries:
+    # for house in houses:
+    #     sorted_batteries = []
+    #     for battery in batteries:
+    #         route = Route(house, battery)
+    #         cap_left = battery.get_capacity() - battery.get_used_cap()
+    #         if house.get_output() < cap_left:
+    #             sorted_batteries.append((route.get_length(), battery))
+    #     sorted_batteries = countSort2(sorted_batteries)
+    #     if len(sorted_batteries) > 0:
+    #         sorted_batteries[0][1].connect_house(house)
+    #     else:
+    #         print("not all batteries are connected")
+    #         sys.exit()
+    # return len(houses) == 150
+
+
+    routes_list = []
+    for battery in batteries:
+        route_list = []
+        for house in houses:
             route = Route(house, battery)
-            cap_left = battery.get_capacity() - battery.get_used_cap()
-            if house.get_output() < cap_left:
-                sorted_batteries.append((route.get_length(), battery))
-        sorted_batteries = countSort2(sorted_batteries)
-        sorted_batteries[0][1].connect_house(house)
-    return len(houses) == 150
+            route_list.append((route.get_length(), house, battery))
+        route_list = countSort2(route_list)
+        routes_list.append(route_list)
+
+    connected_houses = []
+    while len(connected_houses) < 150:
+        shortest_route = (100, None, None)
+        for routes in routes_list:
+            if len(routes) > 0:
+                route = routes[0]
+                route_length = route[0]
+                if route_length < shortest_route[0]:
+                    shortest_route = route                 
+        shortest_route[2].connect_house(shortest_route[1])
+        connected_houses.append(shortest_route[1])
+        for routes in routes_list:
+            for route in routes:
+                if route[1] == shortest_route[1]:
+                    routes.remove(route)
+    return len(connected_houses) == 150
 
 def hillclimb(batteries, houses):
     # first get all the routes from the previous algorithm
@@ -109,15 +139,17 @@ def constraint_relaxation(batteries, houses):
         sorted_houses = countSort2(unsorted)
         distances.append(sorted_houses)
 
+
     while len(houses) > 0:
         closest = distances[0][0]
         id = 0
         for i in range(len(distances)):
             # check the first element of eacht list if it is closer than the
             # previous one
-            if distances[i][0][0] < closest[0]:
-                closest = distances[i][0]
-                id = i
+            if len(distances[i]) > 0:
+                if distances[i][0][0] < closest[0]:
+                    closest = distances[i][0]
+                    id = i
         # connect the closest house
         batteries[id].connect_house(closest[1])
         houses.remove(closest[1])

@@ -8,7 +8,6 @@ import helpers
 
 ROUTE_COST = 9
 
-
 def main():
     switcher = {
         "1": ("Data/wijk1_batterijen.txt", "Data/wijk1_huizen.txt"),
@@ -35,7 +34,6 @@ def main():
         if sys.argv[3] == "0" or sys.argv[3] == None:
             print("no third algorithm")
         elif sys.argv[3] == "1":
-            visualize(batteries, houses)
             connected1 = algorithms.hillclimb(batteries, houses)
         else:
             print("we haven't implemented that yet")
@@ -43,12 +41,12 @@ def main():
     except:
         print("no third algorithm")
 
-    # print true if all houses connected, and total price
-    print(connected)
-    for battery in batteries:
-        print(battery.get_used_cap())
-    print(helpers.check_cross_houses(houses, batteries))
-    print(calculate_costs(batteries))
+    if connected:
+        print("Alle huizen zijn verbonden")
+    else:
+        print("Er zijn een aantal huizen niet verbonden")
+    print("Hoeveel huizen kruizen al onze routes =", helpers.check_cross_houses(houses, batteries))
+    print("kosten van het plaatsen van de verbindingen =", calculate_costs(batteries))
     visualize(batteries, houses)
     plt.show()
 
@@ -117,13 +115,14 @@ def calculate_costs(batteries):
 
 def visualize(batteries, houses):
     #Iterate over the batteries to find the route with the corresponding house
-    
-    
+
     for battery in batteries:
         plt.plot(battery.get_x(),battery.get_y() ,'X', color = 'black', markersize=12)
         for route in battery.get_routes():
+        
             length = route.get_length()
             # Retrieve the route between battery and house
+
             if length < 40:
                 routes = [(tup1, tup2) for tup1, tup2 in route.get_coordinates()]
                 plt.plot(*zip(*routes), linewidth = 1, linestyle = 'solid', marker = 'o', markersize = 1, color = 'blue')

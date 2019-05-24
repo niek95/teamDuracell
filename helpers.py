@@ -80,6 +80,5 @@ def check_cross_houses(houses, batteries):
                     house_coordinate = (house.get_x(), house.get_y())
                     if house_coordinate in route.get_coordinates():
                         count += 1
-                        count1 += 1
-            print(count1)
+                        count1 += 1 
         return count
