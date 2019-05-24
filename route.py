@@ -5,7 +5,7 @@ class Route(object):
     def __init__(self, house, battery):
         self._house = house
         self._battery = battery
-        self._coordinates = self.a_ster((house.get_x(), house.get_y()), (battery.get_x(), battery.get_y()))
+        self._coordinates = self.calculate_route()
         self._length = len(self._coordinates)
 
     def calculate_route(self):

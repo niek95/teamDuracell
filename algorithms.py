@@ -207,7 +207,10 @@ def change_batteries(houses):
 def change_batteries1(houses):
     coordinates = []
     for house in houses:
-        coordinate = ((house.get_x(), house.get_y()))
+        coordinate = []
+        coordinate.append(house.get_x())
+        coordinate.append(house.get_y())
+        coordinates.append(coordinate)
     coordinates.append(coordinate)
     kmeans = KMeans(n_clusters=17, random_state=0).fit(coordinates)
     centers = kmeans.cluster_centers_
