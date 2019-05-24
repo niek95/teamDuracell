@@ -43,3 +43,7 @@ class Battery(object):
 
     def get_over_cap(self):
         return self.used_cap > self.capacity
+
+    def clear_all(self):
+        self.routes = []
+        self.used_cap = 0

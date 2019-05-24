@@ -10,6 +10,25 @@ ROUTE_COST = 9
 
 
 def main():
+    try:
+        map = sys.argv[1]
+    except IndexError:
+        print("Please specify map parameter")
+        sys.exit(1)
+    try:
+        algorithm = sys.argv[2]
+    except IndexError:
+        print("Please specify algorithm parameter")
+        sys.exit(1)
+    try:
+        hillclimb = sys.argv[3]
+    except IndexError:
+        print("Please specify hillclimb")
+        sys.exit(1)
+    try:
+        runs = int(sys.argv[4])
+    except IndexError:
+        print("Please specify amount of runs")
     # Choose battery and house map
     switcher = {
         "1": ("Data/wijk1_batterijen.txt", "Data/wijk1_huizen.txt"),
@@ -17,53 +36,71 @@ def main():
         "3": ("Data/wijk3_batterijen.txt", "Data/wijk3_huizen.txt")
     }
     try:
-        houses = import_houses(switcher[sys.argv[1]][1])
-        batteries = import_batteries(switcher[sys.argv[1]][0], houses)
-    except IndexError:
-        print("Please specify map parameter")
+        houses = import_houses(switcher[map][1])
+        batteries = import_batteries(switcher[map][0], houses)
+    except IOError:
+        print("Can't open files")
         sys.exit(1)
 
+    results = []
     # Run algorithm of choice
-    try:
-        if sys.argv[2] == "1":
-            print("Connecting houses using random algorithm")
+    if algorithm == "1":
+        print("Connecting houses using random algorithm")
+        for _ in range(runs):
             connected = algorithms.connect_basic(batteries, houses)
-        elif sys.argv[2] == "2":
-            print("Connecting houses using greedy algorithm")
+            apply_hillclimb(hillclimb, batteries, houses)
+            results.append(calculate_costs(batteries))
+            if runs > 1:
+                clear_routes(batteries)
+    elif algorithm == "2":
+        print("Connecting houses using greedy algorithm")
+        for _ in range(runs):
             connected = algorithms.connect_greedy(batteries, houses)
-        elif sys.argv[2] == "3":
-            print("Connecting houses using constraint relaxation algorithm")
+            apply_hillclimb(hillclimb, batteries, houses)
+            results.append(calculate_costs(batteries))
+            if runs > 1:
+                clear_routes(batteries)
+    elif algorithm == "3":
+        print("Connecting houses using constraint relaxation algorithm")
+        for _ in range(runs):
             connected = algorithms.constraint_relaxation(batteries, houses)
-        else:
-            print("we haven't implemented that yet")
-            sys.exit(1)
-    except IndexError:
-        print("Please specify algorithm parameter")
+            apply_hillclimb(hillclimb, batteries, houses)
+            results.append(calculate_costs(batteries))
+            if runs > 1:
+                clear_routes(batteries)
+    else:
+        print("We haven't implemented that yet")
         sys.exit(1)
 
+    print(min(results))
+    # Print relevant info and plot
+    if runs == 1:
+        if connected:
+            print("All houses connected")
+        else:
+            print("Some houses not connected")
+        print("Houses crossed by routes =",
+              helpers.check_cross_houses(houses, batteries))
+        print("Total costs:",
+              calculate_costs(batteries))
+        visualize(batteries, houses)
+        plt.show()
+
+
+def apply_hillclimb(hillclimb, batteries, houses):
     # Apply hillclimbing
     try:
-        if sys.argv[3] == "0":
+        if hillclimb == "0":
             print("Don't apply hillclimb")
-        elif sys.argv[3] == "1":
+        elif hillclimb == "1":
             print("Applying hillclimb")
             algorithms.hillclimb(batteries, houses)
             sys.exit(1)
+        else:
+            print("Hillclimb parameter should be 0 or 1")
     except IndexError:
         print("Please specify hillclimb parameter")
         sys.exit(1)
-
-    # Print relevant info and plot
-    if connected:
-        print("All houses connected")
-    else:
-        print("Some houses not connected")
-    print("Houses crosses by routes =",
-          helpers.check_cross_houses(houses, batteries))
-    print("kosten van het plaatsen van de verbindingen =",
-          calculate_costs(batteries))
-    visualize(batteries, houses)
-    plt.show()
 
 
 def import_batteries(file, houses):
@@ -162,6 +199,11 @@ def visualize(batteries, houses):
                 plt.plot(*zip(*routes), linewidth=1, linestyle='solid',
                          marker='o', markersize=1, color='red')
                 plt.pause(0.1)
+
+
+def clear_routes(batteries):
+    for battery in batteries:
+        battery.clear_all()
 
 
 if __name__ == "__main__":

@@ -28,7 +28,7 @@ def connect_greedy(batteries, houses):
     """
     Goes through each battery, adding the most nearby houses if possible
     """
-    houses = random.shuffle(houses)
+    random.shuffle(houses)
     batteries = batteries
 
     for house in houses:
@@ -38,6 +38,8 @@ def connect_greedy(batteries, houses):
             cap_left = battery.get_capacity() - battery.get_used_cap()
             if house.get_output() < cap_left:
                 sorted_batteries.append((route.get_length(), battery))
+        if not sorted_batteries:
+            break
         sorted_batteries = countSort2(sorted_batteries)
         sorted_batteries[0][1].connect_house(house)
     return len(houses) == 150
