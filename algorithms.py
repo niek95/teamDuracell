@@ -8,7 +8,7 @@ def connect_basic(batteries, houses):
     """
     Goes through each battery, adding houses if possible
     """
-    houses = houses
+    random.shuffle(houses)
     batteries = batteries
     connected_houses = []
 
@@ -95,20 +95,19 @@ def constraint_relaxation(batteries, houses):
     Keeps connecting the closest house and battery, then switches routes until
     constraints are satisfied
     """
-    houses = houses
-    batteries = batteries
+    houses_local = houses
+    batteries_local = batteries
     # distances contains a number of lists, one for each battery,
     # containing tuples of houses and distances to the corresponding battery
     distances = []
-    for battery in batteries:
+    for battery in batteries_local:
         unsorted = []
-        for house in houses:
+        for house in houses_local:
             route = Route(house, battery)
             unsorted.append((route.get_length(), house))
         sorted_houses = countSort2(unsorted)
         distances.append(sorted_houses)
-
-    while len(houses) > 0:
+    while len(houses_local) > 0:
         closest = distances[0][0]
         id = 0
         for i in range(len(distances)):
@@ -119,13 +118,13 @@ def constraint_relaxation(batteries, houses):
                     closest = distances[i][0]
                     id = i
         # connect the closest house
-        batteries[id].connect_house(closest[1])
-        houses.remove(closest[1])
+        batteries_local[id].connect_house(closest[1])
+        houses_local.remove(closest[1])
         for d in distances:
             for tuple in d:
                 if tuple[1] == closest[1]:
                     d.remove(tuple)
-    return apply_constraints(batteries)
+    return apply_constraints(batteries_local)
 
 
 def apply_constraints(batteries):
@@ -142,7 +141,7 @@ def apply_constraints(batteries):
             over_cap.append(battery)
         else:
             under_cap.append(battery)
-    # until constraints are satisfied, take random route from the over_cap
+    # until constraints are satisfied, take random house from the over_cap
     # battery and try to find a place for it in an under_cap battery
     while not check_satisfied(batteries):
         for battery in over_cap:
@@ -171,7 +170,8 @@ def apply_constraints(batteries):
 
 
 def switch_constraints(over_cap, under_cap):
-    # keep checking if the constraints are satisfied
+    # Look for possible switches between over-capacity batteries en those that
+    # are not until they are under capacity
     while check_satisfied(over_cap) is False:
         # pick two random routes to switch, and do so if it helps the cap
         for battery in over_cap:
@@ -181,6 +181,10 @@ def switch_constraints(over_cap, under_cap):
             route_2 = routes_2[random.randrange(len(routes_2))]
             if check_switch_cap(route_1, route_2):
                 switch(route_1, route_2)
+        for battery in over_cap:
+            if not battery.get_over_cap():
+                over_cap.remove(battery)
+                under_cap.append(battery)
     return check_satisfied(over_cap)
 
 

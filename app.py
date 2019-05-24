@@ -48,8 +48,9 @@ def main():
         print("Connecting houses using random algorithm")
         for _ in range(runs):
             connected = algorithms.connect_basic(batteries, houses)
-            apply_hillclimb(hillclimb, batteries, houses)
-            results.append(calculate_costs(batteries))
+            if connected:
+                apply_hillclimb(hillclimb, batteries, houses)
+                results.append(calculate_costs(batteries))
             if runs > 1:
                 clear_routes(batteries)
     elif algorithm == "2":
@@ -66,6 +67,10 @@ def main():
             connected = algorithms.constraint_relaxation(batteries, houses)
             apply_hillclimb(hillclimb, batteries, houses)
             results.append(calculate_costs(batteries))
+            # re-add houses, as they seem to disappear
+            for battery in batteries:
+                for route in battery.get_routes():
+                    houses.append(route.get_house())
             if runs > 1:
                 clear_routes(batteries)
     else:
