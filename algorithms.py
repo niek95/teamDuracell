@@ -22,7 +22,7 @@ def connect_basic(batteries, houses):
             if house.get_output() < cap_left:
                 battery.connect_house(house)
                 connected_houses.append(house)
-        
+
     return len(houses) == 150
 
 
@@ -32,9 +32,6 @@ def connect_greedy(batteries, houses):
     """
     houses = houses
     batteries = batteries
-    counter = 0
-
-    connected_house = []
 
     for house in houses:
         sorted_batteries = []
@@ -46,6 +43,7 @@ def connect_greedy(batteries, houses):
         sorted_batteries = countSort2(sorted_batteries)
         sorted_batteries[0][1].connect_house(house)
     return len(houses) == 150
+
 
 def hillclimb(batteries, houses):
     # first get all the routes from the previous algorithm
@@ -92,6 +90,7 @@ def hillclimb(batteries, houses):
     print(changed)
     return len(houses) == 150
 
+
 def constraint_relaxation(batteries, houses):
     """
     Keeps connecting the closest house and battery, then switches routes until
@@ -109,7 +108,6 @@ def constraint_relaxation(batteries, houses):
             unsorted.append((route.get_length(), house))
         sorted_houses = countSort2(unsorted)
         distances.append(sorted_houses)
-
 
     while len(houses) > 0:
         closest = distances[0][0]
@@ -184,11 +182,13 @@ def switch_constraints(over_cap, under_cap):
                 switch(route_1, route_2)
     return check_satisfied(over_cap)
 
+
 def check_satisfied(batteries):
     for battery in batteries:
         if battery.get_used_cap() > battery.get_capacity():
             return False
     return True
+
 
 def change_batteries(houses):
     coordinates = []
@@ -199,5 +199,5 @@ def change_batteries(houses):
         coordinates.append(coordinate)
     kmeans = KMeans(n_clusters=5, random_state=0).fit(coordinates)
     centers = kmeans.cluster_centers_
-    
+
     return centers
