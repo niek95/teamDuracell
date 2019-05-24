@@ -6,6 +6,7 @@ from sklearn.cluster import KMeans
 import numpy as np
 import sys
 
+
 def connect_basic(batteries, houses):
     """
     Goes through each battery, adding houses if possible

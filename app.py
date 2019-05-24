@@ -1,5 +1,6 @@
 import sys
 import algorithms
+import route_settings
 from battery import Battery
 from house import House
 from route import Route
@@ -16,6 +17,9 @@ def main():
         "3": ("Data/wijk3_batterijen.txt", "Data/wijk3_huizen.txt")
     }
     houses = import_houses(switcher[sys.argv[1]][1])
+    route_settings.init()
+    for house in houses:
+        route_settings.house_coordinates.append((house.get_x(), house.get_y()))
     batteries = import_batteries(switcher[sys.argv[1]][0], houses)
 
     for house in houses:
@@ -27,6 +31,8 @@ def main():
         connected = algorithms.connect_greedy(batteries, houses)
     elif sys.argv[2] == "3":
         connected = algorithms.constraint_relaxation(batteries, houses)
+    elif sys.argv[2] == "4":
+        connected = algorithms.a_ster(batteries, houses)
     else:
         print("we haven't implemented that yet")
         sys.exit(1)
@@ -138,7 +144,6 @@ def visualize(batteries, houses):
 
     # Show the route in a grid
     plt.grid()
-
 
 if __name__ == "__main__":
     main()
