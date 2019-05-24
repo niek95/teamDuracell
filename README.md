@@ -1,15 +1,17 @@
 Smart grid
 ==========
-For this case we start with a neighbourhood containing a set of houses and
-batteries with a set capacity. The houses produce power, which has to be stored
-in the batteries. Cables to the batteries cost money, so the goal is to connect
-all houses with a battery for the least amount of money
-=============
+
 Team Duracell
 =============
 Niek Slemmmer 12639184
 Tim de Boer 11202351
 Joost Bankras 12377775
+
+## The case
+For this case we start with a neighbourhood containing a set of houses and
+batteries with a set capacity. The houses produce power, which has to be stored
+in the batteries. Cables to the batteries cost money, so the goal is to connect
+all houses with a battery for the least amount of money
 
 ## algorithms
 * Connect random: an algorithm that connects each house to whatever battery
