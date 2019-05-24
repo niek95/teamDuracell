@@ -2,8 +2,9 @@ import sys
 import algorithms
 from battery import Battery
 from house import House
+from route import Route
 import matplotlib.pyplot as plt
-import route 
+import route
 import helpers
 
 ROUTE_COST = 9
@@ -16,7 +17,7 @@ def main():
     }
     houses = import_houses(switcher[sys.argv[1]][1])
     batteries = import_batteries(switcher[sys.argv[1]][0], houses)
-    
+
 
     for house in houses:
         plt.plot(house.get_x(),house.get_y() ,'o', color = 'black', markersize=2)
@@ -60,7 +61,7 @@ def import_batteries(file, houses):
             id = 0
             for line in f:
                 lines = line.split(',')
-                
+
                 if "y" in prompt:
                     for house in houses:
                         center1 = round(coordinates[id][0],0)
@@ -119,11 +120,15 @@ def visualize(batteries, houses):
     for battery in batteries:
         plt.plot(battery.get_x(),battery.get_y() ,'X', color = 'black', markersize=12)
         for route in battery.get_routes():
-        
+
             length = route.get_length()
             # Retrieve the route between battery and house
-
-            if length < 40:
+            optimal = True
+            for battery in batteries:
+                test = Route(route.get_house(), battery)
+                if test.get_length() < length:
+                    optimal = False
+            if optimal:
                 routes = [(tup1, tup2) for tup1, tup2 in route.get_coordinates()]
                 plt.plot(*zip(*routes), linewidth = 1, linestyle = 'solid', marker = 'o', markersize = 1, color = 'blue')
                 plt.pause(0.1)
@@ -131,7 +136,7 @@ def visualize(batteries, houses):
                 routes = [(tup1, tup2) for tup1, tup2 in route.get_coordinates()]
                 plt.plot(*zip(*routes), linewidth = 1, linestyle = 'solid', marker = 'o', markersize = 1, color = 'red')
                 plt.pause(0.1)
-    
+
     # Show the route in a grid
     plt.grid()
 
