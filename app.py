@@ -65,14 +65,9 @@ def import_batteries(file, houses):
                 if "y" in prompt:
                     coordinates = algorithms.change_batteries(houses)
                     for house in houses:
-<<<<<<< HEAD
-                        center1 = round(coordinates[id][0], 0)
-                        center2 = round(coordinates[id][1], 0)
-=======
                         center1 = round(coordinates[id][0],0)
                         center2 = round(coordinates[id][1],0)
 
->>>>>>> change_batteries
                         if house.get_x() == center1 and house.get_y() == center2:
                             center1 += 1
                             center2 += 1

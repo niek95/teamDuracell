@@ -1,11 +1,8 @@
 from helpers import countSort2, switch, check_switch
 from route import Route
 import random
-<<<<<<< HEAD
-=======
 from battery import Battery
 import matplotlib.pyplot as plt
->>>>>>> change_batteries
 from helpers import check_switch_cap, switch
 from sklearn.cluster import KMeans
 import numpy as np
@@ -37,12 +34,9 @@ def connect_greedy(batteries, houses):
     """
     houses = houses
     batteries = batteries
-<<<<<<< HEAD
-=======
     counter = 0
 
     connected_houses = []
->>>>>>> change_batteries
 
     for house in houses:
         sorted_batteries = []
@@ -212,10 +206,6 @@ def change_batteries(houses):
         coordinates.append(coordinate)
     kmeans = KMeans(n_clusters=5, random_state=0).fit(coordinates)
     centers = kmeans.cluster_centers_
-<<<<<<< HEAD
-
-    return centers
-=======
     return centers
 
 def change_batteries1(houses):
@@ -235,8 +225,8 @@ def change_batteries2(batteries):
         change_battery = check_change(batterie, batteries)
         batteries.remove(change_battery)
         batteries.remove(batterie)
-        x = min(change_battery.get_x, batterie.get_x)
-        y = min(change_battery.get_y, batterie.get_y)
+        x = min(change_battery.get_x(), batterie.get_x())
+        y = min(change_battery.get_y(), batterie.get_y())
         batterie = Battery(id, x, y, 900)
         batteries.append(batterie)
         id += 1
@@ -248,7 +238,7 @@ def check_change(batterie, batteries):
         batterie_length = 0
         for route in batterie.get_routes():
             batterie += route.get_length()
-        if batterie1 is not batterie and batterie1.max_input != 450:
+        if batterie1 is not batterie and batterie1.capacity != 450:
             batterie1_length = 0
             for route in batterie1.get_routes():
                 batterie1_length += route.get_length
@@ -256,4 +246,3 @@ def check_change(batterie, batteries):
                 smallest_length = batterie_length + batterie1_length
                 batterie2 = batterie1
     return batterie2
->>>>>>> change_batteries
