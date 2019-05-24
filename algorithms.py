@@ -86,7 +86,6 @@ def hillclimb(batteries, houses):
                 permanent_route1 = None
             j += 1
         i += 1
-    print(changed)
     return len(houses) == 150
 
 

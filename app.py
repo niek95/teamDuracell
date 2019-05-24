@@ -100,7 +100,6 @@ def apply_hillclimb(hillclimb, batteries, houses):
         elif hillclimb == "1":
             print("Applying hillclimb")
             algorithms.hillclimb(batteries, houses)
-            sys.exit(1)
         else:
             print("Hillclimb parameter should be 0 or 1")
     except IndexError:
