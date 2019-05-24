@@ -34,22 +34,6 @@ def connect_greedy(batteries, houses):
     batteries = batteries
     counter = 0
 
-    # for house in houses:
-    #     sorted_batteries = []
-    #     for battery in batteries:
-    #         route = Route(house, battery)
-    #         cap_left = battery.get_capacity() - battery.get_used_cap()
-    #         if house.get_output() < cap_left:
-    #             sorted_batteries.append((route.get_length(), battery))
-    #     sorted_batteries = countSort2(sorted_batteries)
-    #     if len(sorted_batteries) > 0:
-    #         sorted_batteries[0][1].connect_house(house)
-    #     else:
-    #         print("not all batteries are connected")
-    #         sys.exit()
-    # return len(houses) == 150
-
-
     routes_list = []
     for battery in batteries:
         route_list = []
@@ -86,7 +70,6 @@ def hillclimb(batteries, houses):
     for battery in batteries:
         for route in battery.routes:
             routes.append((route.get_length(), route))
-
     # sort all those routes
     sorted_routes = countSort2(routes)
     i = 0
@@ -119,6 +102,7 @@ def hillclimb(batteries, houses):
                 permanent_route1 = None
             j += 1
         i += 1
+    print(changed)
     return len(houses) == 150
 
 def constraint_relaxation(batteries, houses):
