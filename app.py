@@ -142,9 +142,9 @@ def visualize(batteries, houses):
         plt.plot(battery.get_x(), battery.get_y(),
                  'X', color='black', markersize=12)
         for route in battery.get_routes():
-
+            # Check if the route selected is optimal, or if the house has
+            # a battery closer by
             length = route.get_length()
-            # Retrieve the route between battery and house
             optimal = True
             for battery in batteries:
                 test = Route(route.get_house(), battery)
