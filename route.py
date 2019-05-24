@@ -32,11 +32,9 @@ class Route(object):
                 if start_x < eind_x:
                     route.append((x, y))
                     x += 1
-
                 else:
                     route.append((x, y))
                     x -= 1
-
             elif y != eind_y:
                 if start_y < eind_y:
                     route.append((x, y))
