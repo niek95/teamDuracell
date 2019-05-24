@@ -4,10 +4,10 @@ from battery import Battery
 from house import House
 from route import Route
 import matplotlib.pyplot as plt
-import route
 import helpers
 
 ROUTE_COST = 9
+
 
 def main():
     switcher = {
@@ -17,7 +17,6 @@ def main():
     }
     houses = import_houses(switcher[sys.argv[1]][1])
     batteries = import_batteries(switcher[sys.argv[1]][0], houses)
-
 
     for house in houses:
         plt.plot(house.get_x(),house.get_y() ,'o', color = 'black', markersize=2)
@@ -32,7 +31,7 @@ def main():
         print("we haven't implemented that yet")
         sys.exit(1)
     try:
-        if sys.argv[3] == "0" or sys.argv[3] == None:
+        if sys.argv[3] == "0" or sys.argv[3] is None:
             print("no third algorithm")
         elif sys.argv[3] == "1":
             connected1 = algorithms.hillclimb(batteries, houses)
@@ -64,8 +63,8 @@ def import_batteries(file, houses):
 
                 if "y" in prompt:
                     for house in houses:
-                        center1 = round(coordinates[id][0],0)
-                        center2 = round(coordinates[id][1],0)
+                        center1 = round(coordinates[id][0], 0)
+                        center2 = round(coordinates[id][1], 0)
                         if house.get_x() == center1 and house.get_y() == center2:
                             center1 += 1
                             center2 += 1
@@ -115,7 +114,7 @@ def calculate_costs(batteries):
 
 
 def visualize(batteries, houses):
-    #Iterate over the batteries to find the route with the corresponding house
+    # Iterate over the batteries to find the route with the corresponding house
 
     for battery in batteries:
         plt.plot(battery.get_x(),battery.get_y() ,'X', color = 'black', markersize=12)
@@ -139,6 +138,7 @@ def visualize(batteries, houses):
 
     # Show the route in a grid
     plt.grid()
+
 
 if __name__ == "__main__":
     main()
