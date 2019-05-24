@@ -28,7 +28,7 @@ def connect_greedy(batteries, houses):
     """
     Goes through each battery, adding the most nearby houses if possible
     """
-    houses = houses
+    houses = random.shuffle(houses)
     batteries = batteries
 
     for house in houses:
@@ -44,8 +44,7 @@ def connect_greedy(batteries, houses):
 
 
 def hillclimb(batteries, houses):
-    # first get all the routes from the previous algorithm
-
+    # Get all the routes from the previous algorithm
     batteries = batteries
     houses = houses
     routes = []
@@ -53,11 +52,10 @@ def hillclimb(batteries, houses):
     for battery in batteries:
         for route in battery.routes:
             routes.append((route.get_length(), route))
-    # sort all those routes
+    # Sort all those routes
     sorted_routes = countSort2(routes)
     i = 0
     changed = 0
-    # keep going through the whole list of routes untill the end
     while i < len(sorted_routes):
         route1 = sorted_routes[len(sorted_routes) - (i + 1)]
         j = 0
