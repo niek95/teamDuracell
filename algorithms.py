@@ -1,6 +1,7 @@
 from helpers import countSort2, switch, check_switch
 from route import Route
 import random
+from battery import Battery
 import matplotlib.pyplot as plt
 from helpers import check_switch_cap, switch
 from sklearn.cluster import KMeans
@@ -35,7 +36,7 @@ def connect_greedy(batteries, houses):
     batteries = batteries
     counter = 0
 
-    connected_house = []
+    connected_houses = []
 
     for house in houses:
         sorted_batteries = []
@@ -45,7 +46,9 @@ def connect_greedy(batteries, houses):
             if house.get_output() < cap_left:
                 sorted_batteries.append((route.get_length(), battery))
         sorted_batteries = countSort2(sorted_batteries)
+        print(len(connected_houses))
         sorted_batteries[0][1].connect_house(house)
+        connected_houses.append(house)
     return len(houses) == 150
 
 def hillclimb(batteries, houses):
@@ -198,5 +201,43 @@ def change_batteries(houses):
         coordinates.append(coordinate)
     kmeans = KMeans(n_clusters=5, random_state=0).fit(coordinates)
     centers = kmeans.cluster_centers_
-    plt.scatter(*zip(*coordinates), c=kmeans)
     return centers
+
+def change_batteries1(houses):
+    coordinates = []
+    for house in houses:
+        coordinate = ((house.get_x(),house.get_y()))
+        coordinates.append(coordinate)
+    kmeans = KMeans(n_clusters=17, random_state=0).fit(coordinates)
+    centers = kmeans.cluster_centers_
+    
+    return centers
+
+def change_batteries2(batteries):
+    id = 17
+    batteries = batteries
+    for batterie in batteries:
+        change_battery = check_change(batterie, batteries)
+        batteries.remove(change_battery)
+        batteries.remove(batterie)
+        x = min(change_battery.get_x, batterie.get_x)
+        y = min(change_battery.get_y, batterie.get_y)
+        batterie = Battery(id, x, y, 900)
+        batteries.append(batterie)
+        id += 1
+    return batteries
+    
+def check_change(batterie, batteries):
+    smallest_length = 1000
+    for batterie1 in batteries:
+        batterie_length = 0
+        for route in batterie.get_routes():
+            batterie += route.get_length()
+        if batterie1 is not batterie and batterie1.max_input != 450:
+            batterie1_length = 0
+            for route in batterie1.get_routes():
+                batterie1_length += route.get_length
+            if batterie_length + batterie1_length < smallest_length:
+                smallest_length = batterie_length + batterie1_length
+                batterie2 = batterie1
+    return batterie2

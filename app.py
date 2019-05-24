@@ -42,6 +42,7 @@ def main():
     except:
         print("no third algorithm")
 
+
     if connected:
         print("Alle huizen zijn verbonden")
     else:
@@ -56,29 +57,55 @@ def import_batteries(file, houses):
     batteries = []
     try:
         with open(file, "r") as f:
-            coordinates = algorithms.change_batteries(houses)
+            
             prompt = input("wilt u de batterijen verplaatsen met k-means? y / n ?")
             id = 0
             for line in f:
                 lines = line.split(',')
 
                 if "y" in prompt:
+                    coordinates = algorithms.change_batteries(houses)
                     for house in houses:
                         center1 = round(coordinates[id][0],0)
                         center2 = round(coordinates[id][1],0)
+
                         if house.get_x() == center1 and house.get_y() == center2:
                             center1 += 1
                             center2 += 1
                         x_battery = center1
                         y_battery = center2
-                else:
+                    max_input = lines[2].strip()
+                    max_input = float(max_input)
+                    battery = Battery(id, x_battery, y_battery, max_input)
+                    batteries.append(battery)
+                    id += 1
+                
+                    
+                elif "n" in prompt:
                     x_battery = lines[0]
                     y_battery = lines[1]
-                max_input = lines[2].strip()
-                max_input = float(max_input)
-                battery = Battery(id, x_battery, y_battery, max_input)
-                batteries.append(battery)
-                id += 1
+                    max_input = lines[2].strip()
+                    max_input = float(max_input)
+                    battery = Battery(id, x_battery, y_battery, max_input)
+                    batteries.append(battery)
+                    id += 1
+            if "k" in prompt:
+                coordinates = algorithms.change_batteries1(houses)
+                for i in range(0, len(coordinates)):
+                    max_input = 1800
+                    max_input = float(max_input)
+                    for house in houses:
+                        center1 = round(coordinates[i][0],0)
+                        center2 = round(coordinates[i][1],0)
+
+                        if house.get_x() == center1 and house.get_y() == center2:
+                            center1 += 1
+                            center2 += 1
+                        x_battery = center1
+                        y_battery = center2
+                    battery = Battery(i, x_battery, y_battery, max_input)
+                    batteries.append(battery)
+                algorithms.change_batteries2(batteries)
     except IOError:
         print("Couldn't open battery file")
         sys.exit
