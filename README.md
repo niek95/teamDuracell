@@ -33,7 +33,7 @@ Install matplotlib, numpy and scikit_learn, as per requirements.txt
 ## Usage
 ```
   Usage:
-    python app.py [map] [algorithm] [hillclimb] [runs] [pathfinding]
+    python app.py [map] [algorithm] [hillclimb] [runs]
 
   map:
     There are 3 maps available, choose "1", "2" or "3"
@@ -49,4 +49,6 @@ Install matplotlib, numpy and scikit_learn, as per requirements.txt
   pathfinding:
     "0" : standard pathfinding, straight up and horizontally
     "1" : A* pathfinding, avoids houses if necessary (almost always)
+    Unfortunately, we couldn't fix the bug in the A star algorithm to run it.
+    However, we did push it to our master to show you our effort, hopefully we can fix it eventually.
 ```
