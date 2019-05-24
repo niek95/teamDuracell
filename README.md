@@ -10,8 +10,7 @@ Joost Bankras 12377775
 Install matplotlib, numpy and scikit_learn, as per requirements.text
 
 ## Usage
------
-::
+'''
   Usage:
     python app.py [map] [algorithm] [hillclimb] [runs]
 
@@ -26,3 +25,4 @@ Install matplotlib, numpy and scikit_learn, as per requirements.text
     "1" : Use hillclimb on top of the solution from the other algorithm
   runs:
     Specify the number of runs to do. We advise keeping this number under x
+'''
