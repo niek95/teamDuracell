@@ -50,21 +50,18 @@ class Route(object):
                 if start_x < eind_x:
                     route.append((x, y))
                     x += 1
-                    
                 else:
                     route.append((x, y))
                     x -= 1
-                    
             elif y != eind_y:
                 if start_y < eind_y:
                     route.append((x, y))
                     y += 1
-                    
                 else:
                     route.append((x, y))
                     y -= 1
-        route.append((eind_x,eind_y))            
-        return route 
+        route.append((eind_x, eind_y))
+        return route
 
     def get_house(self):
         return self._house
@@ -77,5 +74,3 @@ class Route(object):
 
     def get_length(self):
         return self._length
-
-    
