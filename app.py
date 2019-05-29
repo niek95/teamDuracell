@@ -137,12 +137,20 @@ def import_batteries(file, houses):
                 elif "n" in prompt:
                     x_battery = lines[0]
                     y_battery = lines[1]
+<<<<<<< HEAD
                 if x_battery is not None:
                     max_input = lines[2].strip()
                     max_input = float(max_input)
                     battery = Battery(id, x_battery, y_battery, max_input)
                     batteries.append(battery)
                     id += 1
+=======
+                max_input = lines[2].strip()
+                max_input = float(max_input)
+                battery = Battery(id, x_battery, y_battery, max_input)
+                batteries.append(battery)
+                id += 1
+>>>>>>> refs/remotes/origin/master
 
             if "k" in prompt:
                 coordinates = algorithms.change_batteries1(houses)
@@ -158,7 +166,10 @@ def import_batteries(file, houses):
                             center2 += 1
                         x_battery = center1
                         y_battery = center2
+<<<<<<< HEAD
                     print(x_battery, y_battery)
+=======
+>>>>>>> refs/remotes/origin/master
                     battery = Battery(i, x_battery, y_battery, max_input)
                     batteries.append(battery)
 
@@ -234,6 +245,7 @@ def clear_routes(batteries):
     for battery in batteries:
         battery.clear_all()
 
+<<<<<<< HEAD
 def save(batteries, houses):
     plt.rcParams['animation.ffmpeg_path'] = r'C:\Users\Joost Bankras\Anaconda3\Lib\site-packages\ffmpeg-20190527-3da8d04-win64-static\bin\ffmpeg.exe'
     Writer = animation.writers['ffmpeg']
@@ -273,6 +285,8 @@ def save(batteries, houses):
     im_ani = animation.ArtistAnimation(fig2, ims, interval=300, frames=1)
     im_ani.save('im1.mp4', writer=writer)
     
+=======
+>>>>>>> refs/remotes/origin/master
 if __name__ == "__main__":
     main()
     
