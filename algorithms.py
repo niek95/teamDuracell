@@ -1,28 +1,28 @@
 from helpers import countSort2, switch, check_switch, check_switch_cap
 from route import Route
 import random
-from battery import Battery
-import matplotlib.pyplot as plt
-from helpers import check_switch_cap, switch
 from sklearn.cluster import KMeans
+
 
 
 def connect_basic(batteries, houses):
     """
     Goes through each battery, adding houses if possible
     """
-    random.shuffle(houses)
+    house_list = houses
+    random.shuffle(house_list)
     batteries = batteries
     connected_houses = []
 
     # returns true if all houses connected, false otherwise
     for battery in batteries:
         connected_houses = []
-        for house in houses:
+        for house in house_list:
             cap_left = battery.get_capacity() - battery.get_used_cap()
-            if house.get_output() < cap_left:
+            if house.get_output() < cap_left and house not in connected_houses:
                 battery.connect_house(house)
                 connected_houses.append(house)
+                
 
     return len(houses) == 150
 
@@ -33,9 +33,6 @@ def connect_greedy(batteries, houses):
     """
     random.shuffle(houses)
     batteries = batteries
-    counter = 0
-
-    connected_houses = []
 
     for house in houses:
         sorted_batteries = []
@@ -44,12 +41,9 @@ def connect_greedy(batteries, houses):
             cap_left = battery.get_capacity() - battery.get_used_cap()
             if house.get_output() < cap_left:
                 sorted_batteries.append((route.get_length(), battery))
-        if not sorted_batteries:
-            break
-        sorted_batteries = countSort2(sorted_batteries)
-        print(len(connected_houses))
-        sorted_batteries[0][1].connect_house(house)
-        connected_houses.append(house)
+        if len(sorted_batteries) != 0:
+            sorted_batteries = countSort2(sorted_batteries)
+            sorted_batteries[0][1].connect_house(house)
     return len(houses) == 150
 
 
@@ -211,13 +205,18 @@ def change_batteries(houses):
         coordinates.append(coordinate)
     kmeans = KMeans(n_clusters=5, random_state=0).fit(coordinates)
     centers = kmeans.cluster_centers_
+
     return centers
+
 
 def change_batteries1(houses):
     coordinates = []
     for house in houses:
-        coordinate = ((house.get_x(),house.get_y()))
+        coordinate = []
+        coordinate.append(house.get_x())
+        coordinate.append(house.get_y())
         coordinates.append(coordinate)
+    coordinates.append(coordinate)
     kmeans = KMeans(n_clusters=17, random_state=0).fit(coordinates)
-    centers = kmeans.cluster_centers_ 
+    centers = kmeans.cluster_centers_
     return centers
