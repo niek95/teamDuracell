@@ -52,3 +52,5 @@ Install matplotlib, numpy and scikit_learn, as per requirements.txt
     Unfortunately, we couldn't fix the bug in the A star algorithm to run it.
     However, we did push it to our master to show you our effort, hopefully we can fix it eventually.
 ```
+
+Presentatie: https://docs.google.com/presentation/d/1NJu8mz7mKIxp6O7IrKS-RI-A8dUz75PmXRWld4V74K8/edit?usp=sharing
